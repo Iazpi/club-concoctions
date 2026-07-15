@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Barro CB · Gestión de consumiciones" },
       {
         property: "og:description",
-        content: "Cuenta individual por asistente e histórico mensual por ítem.",
+        content: "App para llevar la cuenta de asistentes y consumiciones en los eventos de Barro CB.",
       },
       { property: "og:type", content: "website" },
     ],
