@@ -126,7 +126,7 @@ function RootComponent() {
         className="fixed inset-0 -z-10 bg-cover bg-center"
         style={{
           backgroundImage: `url(${barroBg.url})`,
-          filter: "blur(3px)",
+          filter: "blur(1.5px)",
           transform: "scale(1.08)",
         }}
       />
@@ -135,7 +135,7 @@ function RootComponent() {
         className="fixed inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent) 0%, color-mix(in oklab, var(--background) 78%, transparent) 100%)",
+            "linear-gradient(180deg, color-mix(in oklab, var(--background) 58%, transparent) 0%, color-mix(in oklab, var(--background) 64%, transparent) 100%)",
         }}
       />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
