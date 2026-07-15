@@ -78,10 +78,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Barro · Sociedad gastronómica" },
-      { name: "description", content: "Cuenta de asistentes y consumiciones para los eventos de la sociedad Barro." },
-      { property: "og:title", content: "Barro · Sociedad gastronómica" },
-      { property: "og:description", content: "Cuenta de asistentes y consumiciones para los eventos de la sociedad Barro." },
+      { title: "Barro CB · Gestión de consumiciones" },
+      { name: "description", content: "Cuenta de asistentes y consumiciones para los eventos de Barro CB." },
+      { property: "og:title", content: "Barro CB · Gestión de consumiciones" },
+      { property: "og:description", content: "Cuenta de asistentes y consumiciones para los eventos de Barro CB." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -126,8 +126,8 @@ function RootComponent() {
         className="fixed inset-0 -z-10 bg-cover bg-center"
         style={{
           backgroundImage: `url(${barroBg.url})`,
-          filter: "blur(6px)",
-          transform: "scale(1.05)",
+          filter: "blur(3px)",
+          transform: "scale(1.08)",
         }}
       />
       <div
@@ -135,7 +135,7 @@ function RootComponent() {
         className="fixed inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(180deg, color-mix(in oklab, var(--background) 88%, transparent) 0%, color-mix(in oklab, var(--background) 92%, transparent) 100%)",
+            "linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent) 0%, color-mix(in oklab, var(--background) 78%, transparent) 100%)",
         }}
       />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

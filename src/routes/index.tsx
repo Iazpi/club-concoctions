@@ -10,13 +10,13 @@ import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered } from "lu
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Barro · Gestión de consumiciones" },
+      { title: "Barro CB · Gestión de consumiciones" },
       {
         name: "description",
         content:
-          "App para llevar la cuenta de asistentes y consumiciones en los eventos de la sociedad gastronómica Barro.",
+          "App para llevar la cuenta de asistentes y consumiciones en los eventos de Barro CB.",
       },
-      { property: "og:title", content: "Barro · Gestión de consumiciones" },
+      { property: "og:title", content: "Barro CB · Gestión de consumiciones" },
       {
         property: "og:description",
         content: "Cuenta individual por asistente e histórico mensual por ítem.",
@@ -57,10 +57,10 @@ function Index() {
           )}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold truncate">
-              {event ? event.name : "Barro"}
+              {event ? event.name : "Barro CB"}
             </h1>
             <p className="text-xs text-muted-foreground">
-              {event ? "Cuenta del evento" : "Sociedad gastronómica"}
+              {event ? "Cuenta del evento" : "Gestión de consumiciones"}
             </p>
           </div>
         </div>
