@@ -54,11 +54,12 @@
   * { border-color: var(--color-border); }
   html, body { height: 100%; }
   body {
-    background-color: var(--color-background);
+    background-color: transparent;
     color: var(--color-foreground);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
+  html { background-color: var(--color-background); }
   h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
 }
 

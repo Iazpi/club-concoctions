@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import barroBg from "../assets/barro.jpg.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -120,6 +121,23 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${barroBg.url})`,
+          filter: "blur(6px)",
+          transform: "scale(1.05)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="fixed inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, color-mix(in oklab, var(--background) 88%, transparent) 0%, color-mix(in oklab, var(--background) 92%, transparent) 100%)",
+        }}
+      />
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
