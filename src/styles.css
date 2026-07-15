@@ -31,20 +31,20 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.985 0.008 85);
-  --foreground: oklch(0.22 0.03 40);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.03 40);
-  --muted: oklch(0.94 0.012 75);
-  --muted-foreground: oklch(0.48 0.02 60);
+  --background: oklch(0.96 0.008 85);
+  --foreground: oklch(0.2 0.03 40);
+  --card: oklch(1 0 0 / 0.92);
+  --card-foreground: oklch(0.2 0.03 40);
+  --muted: oklch(0.94 0.012 75 / 0.85);
+  --muted-foreground: oklch(0.42 0.02 60);
   --primary: oklch(0.42 0.11 35); /* terracota */
   --primary-foreground: oklch(0.985 0.008 85);
   --accent: oklch(0.72 0.14 55); /* ámbar cálido */
-  --accent-foreground: oklch(0.22 0.03 40);
+  --accent-foreground: oklch(0.2 0.03 40);
   --socio: oklch(0.55 0.11 145); /* verde oliva */
   --socio-foreground: oklch(0.985 0.008 85);
-  --border: oklch(0.88 0.015 70);
-  --input: oklch(0.9 0.015 70);
+  --border: oklch(0.88 0.015 70 / 0.6);
+  --input: oklch(0.9 0.015 70 / 0.75);
   --ring: oklch(0.42 0.11 35);
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.985 0.008 85);
