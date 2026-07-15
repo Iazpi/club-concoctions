@@ -38,7 +38,7 @@ function Index() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border bg-card sticky top-0 z-40">
+      <header className="border-b border-border bg-card/75 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           {event ? (
             <button
