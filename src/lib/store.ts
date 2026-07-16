@@ -117,7 +117,7 @@ if (typeof window !== "undefined") {
       return;
     }
     if (data?.state) {
-      state = data.state as State;
+      state = data.state as unknown as State;
       emit(false);
     } else {
       // Row doesn't exist yet: push current local state
