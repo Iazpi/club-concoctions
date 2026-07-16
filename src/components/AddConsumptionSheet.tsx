@@ -27,6 +27,11 @@ export function AddConsumptionSheet({
 
   const add = (p: Product) => {
     addConsumption(event.id, attendee.id, p.id, price(p, attendee.socio), 1);
+    setPulseId(p.id);
+    window.setTimeout(
+      () => setPulseId((current) => (current === p.id ? null : current)),
+      350,
+    );
   };
 
   return (
