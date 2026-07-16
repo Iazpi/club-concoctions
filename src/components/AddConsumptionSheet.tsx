@@ -3,7 +3,7 @@ import { PRODUCTS, CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
 import { addConsumption } from "@/lib/store";
 import { Card, Chip } from "@/components/ui";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 export function AddConsumptionSheet({
   event,
@@ -16,6 +16,7 @@ export function AddConsumptionSheet({
 }) {
   const [cat, setCat] = useState(CATEGORIES[0]);
   const [q, setQ] = useState("");
+  const [pulseId, setPulseId] = useState<string | null>(null);
 
   const list = useMemo(() => {
     const base = q
@@ -26,6 +27,11 @@ export function AddConsumptionSheet({
 
   const add = (p: Product) => {
     addConsumption(event.id, attendee.id, p.id, price(p, attendee.socio), 1);
+    setPulseId(p.id);
+    window.setTimeout(
+      () => setPulseId((current) => (current === p.id ? null : current)),
+      350,
+    );
   };
 
   return (
@@ -68,19 +74,29 @@ export function AddConsumptionSheet({
         </div>
 
         <div className="overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {list.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => add(p)}
-              className="text-left rounded-lg border border-border bg-card hover:bg-muted transition-colors p-3 flex items-center justify-between gap-3"
-            >
-              <div className="min-w-0">
-                <div className="font-medium truncate">{p.name}</div>
-                {p.info && <div className="text-xs text-muted-foreground truncate">{p.info}</div>}
-              </div>
-              <div className="font-semibold text-primary shrink-0">{fmt(price(p, attendee.socio))}</div>
-            </button>
-          ))}
+          {list.map((p) => {
+            const active = pulseId === p.id;
+            return (
+              <button
+                key={p.id}
+                onClick={() => add(p)}
+                className={`text-left rounded-lg border p-3 flex items-center justify-between gap-3 transition-all duration-200 ${
+                  active
+                    ? "bg-primary/20 border-primary ring-2 ring-primary scale-[0.98]"
+                    : "border-border bg-card hover:bg-muted"
+                }`}
+              >
+                <div className="min-w-0">
+                  <div className="font-medium truncate">{p.name}</div>
+                  {p.info && <div className="text-xs text-muted-foreground truncate">{p.info}</div>}
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {active && <Check className="w-4 h-4 text-primary" />}
+                  <span className="font-semibold text-primary">{fmt(price(p, attendee.socio))}</span>
+                </div>
+              </button>
+            );
+          })}
           {list.length === 0 && (
             <p className="col-span-full text-center text-sm text-muted-foreground py-8">
               Sin resultados.
