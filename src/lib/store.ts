@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Attendee {
   id: string;
@@ -30,17 +31,23 @@ export interface State {
   activeEventId: string | null;
 }
 
-const KEY = "barro-app-v1";
+const ROW_ID = "main";
+const LOCAL_KEY = "barro-app-v1";
 
 const defaultState: State = { events: [], activeEventId: null };
 
-let state: State = load();
+let state: State = loadLocal();
 const listeners = new Set<() => void>();
 
-function load(): State {
+// Serialize remote writes to avoid clobbering
+let writeChain: Promise<void> = Promise.resolve();
+// Track our own last-written version so we can ignore our own realtime echoes
+let lastPushedAt = 0;
+
+function loadLocal(): State {
   if (typeof window === "undefined") return defaultState;
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(LOCAL_KEY);
     if (!raw) return defaultState;
     return JSON.parse(raw) as State;
   } catch {
@@ -48,14 +55,35 @@ function load(): State {
   }
 }
 
-function persist() {
+function saveLocal() {
   if (typeof window === "undefined") return;
-  localStorage.setItem(KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
 }
 
-function emit() {
-  persist();
+function emit(pushRemote = true) {
+  saveLocal();
   listeners.forEach((l) => l());
+  if (pushRemote) schedulePush();
+}
+
+function schedulePush() {
+  const snapshot = state;
+  const startedAt = Date.now();
+  lastPushedAt = startedAt;
+  writeChain = writeChain
+    .then(async () => {
+      // Only push the most recent snapshot; skip if a newer push has been queued
+      if (startedAt !== lastPushedAt) return;
+      const { error } = await supabase
+        .from("shared_state")
+        .upsert({ id: ROW_ID, state: snapshot as any, updated_at: new Date().toISOString() });
+      if (error) console.error("[store] push error", error);
+    })
+    .catch((e) => console.error("[store] push chain error", e));
 }
 
 export function subscribe(l: () => void) {
@@ -73,6 +101,47 @@ export function useStore<T>(sel: (s: State) => T): T {
     () => sel(state),
     () => sel(defaultState),
   );
+}
+
+// ---- Cloud sync bootstrap ----
+if (typeof window !== "undefined") {
+  // Initial fetch
+  void (async () => {
+    const { data, error } = await supabase
+      .from("shared_state")
+      .select("state")
+      .eq("id", ROW_ID)
+      .maybeSingle();
+    if (error) {
+      console.error("[store] initial fetch error", error);
+      return;
+    }
+    if (data?.state) {
+      state = data.state as State;
+      emit(false);
+    } else {
+      // Row doesn't exist yet: push current local state
+      schedulePush();
+    }
+  })();
+
+  // Realtime subscription
+  supabase
+    .channel("shared_state_changes")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "shared_state", filter: `id=eq.${ROW_ID}` },
+      (payload) => {
+        const next = (payload.new as { state?: State } | null)?.state;
+        if (!next) return;
+        // Merge only if different from current state
+        const nextStr = JSON.stringify(next);
+        if (nextStr === JSON.stringify(state)) return;
+        state = next;
+        emit(false);
+      },
+    )
+    .subscribe();
 }
 
 const uid = () => Math.random().toString(36).slice(2, 10);
