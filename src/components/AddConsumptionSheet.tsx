@@ -16,6 +16,7 @@ export function AddConsumptionSheet({
 }) {
   const [cat, setCat] = useState(CATEGORIES[0]);
   const [q, setQ] = useState("");
+  const [pulseId, setPulseId] = useState<string | null>(null);
 
   const list = useMemo(() => {
     const base = q
