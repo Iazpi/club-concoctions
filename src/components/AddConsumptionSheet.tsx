@@ -3,7 +3,7 @@ import { PRODUCTS, CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
 import { addConsumption } from "@/lib/store";
 import { Card, Chip } from "@/components/ui";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 export function AddConsumptionSheet({
   event,
