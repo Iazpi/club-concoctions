@@ -9,7 +9,7 @@ import {
   setEventClosed,
   deleteEvent,
 } from "@/lib/store";
-import { getProduct, fmt, CLEANING_COST } from "@/lib/catalog";
+import { getProduct, fmt, CLEANING_COST, SOCIOS } from "@/lib/catalog";
 import { Card, Chip } from "@/components/ui";
 import { AddConsumptionSheet } from "./AddConsumptionSheet";
 import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
