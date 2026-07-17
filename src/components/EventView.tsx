@@ -31,10 +31,20 @@ export function EventView({ event }: { event: Event }) {
 
   const grandTotal = totals.reduce((s, t) => s + t.subtotal, 0) + (event.splitCleaning ? CLEANING_COST : 0);
 
-  const addAtt = () => {
+  const usedSocios = new Set(
+    event.attendees.filter((a) => a.socio).map((a) => a.name),
+  );
+  const availableSocios = SOCIOS.filter((n) => !usedSocios.has(n));
+
+  const addSocio = (name: string) => {
+    if (!name) return;
+    addAttendee(event.id, name, true);
+  };
+
+  const addGuest = () => {
     const n = newName.trim();
     if (!n) return;
-    addAttendee(event.id, n, newSocio);
+    addAttendee(event.id, n, false);
     setNewName("");
   };
 
