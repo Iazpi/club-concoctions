@@ -16,7 +16,6 @@ import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
-  const [newSocio, setNewSocio] = useState(true);
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
 
   const totals = event.attendees.map((a) => {
