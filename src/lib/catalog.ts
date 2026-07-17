@@ -81,6 +81,18 @@ export const CATEGORIES: Category[] = [
 
 export const CLEANING_COST = 24;
 
+export const SOCIOS: string[] = [
+  "Cata",
+  "Edu",
+  "Ezcurdia",
+  "Leo",
+  "Javi Pé",
+  "Lerin",
+  "Oli",
+  "Sergio",
+  "Azpi",
+];
+
 export const getProduct = (id: string) => PRODUCTS.find((x) => x.id === id);
 export const price = (prod: Product, socio: boolean) => (socio ? prod.socio : prod.noSocio);
 export const fmt = (n: number) => `${n.toFixed(2).replace(".", ",")} €`;
