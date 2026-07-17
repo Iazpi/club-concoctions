@@ -104,32 +104,51 @@ export function EventView({ event }: { event: Event }) {
       </Card>
 
       {!event.closed && (
-        <Card className="p-4">
-          <h3 className="text-sm font-semibold text-muted-foreground mb-2">Añadir asistente</h3>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              className="input-base flex-1"
-              placeholder="Nombre"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addAtt()}
-            />
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setNewSocio(true)}
-                className={`btn ${newSocio ? "bg-socio text-socio-foreground" : "bg-muted text-muted-foreground"}`}
-              >
-                Socio
-              </button>
-              <button
-                type="button"
-                onClick={() => setNewSocio(false)}
-                className={`btn ${!newSocio ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"}`}
-              >
-                No socio
-              </button>
-              <button className="btn-primary" onClick={addAtt}>
+        <Card className="p-4 space-y-4">
+          <div>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-2">
+              Añadir socio
+            </h3>
+            {availableSocios.length > 0 ? (
+              <div className="flex flex-col sm:flex-row gap-2">
+                <select
+                  className="input-base flex-1"
+                  value=""
+                  onChange={(e) => {
+                    addSocio(e.target.value);
+                    e.currentTarget.value = "";
+                  }}
+                >
+                  <option value="" disabled>
+                    Selecciona un socio…
+                  </option>
+                  {availableSocios.map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Todos los socios ya están añadidos.
+              </p>
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-muted-foreground mb-2">
+              Añadir no socio
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                className="input-base flex-1"
+                placeholder="Nombre"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addGuest()}
+              />
+              <button className="btn-primary" onClick={addGuest}>
                 <UserPlus className="w-4 h-4" /> Añadir
               </button>
             </div>
