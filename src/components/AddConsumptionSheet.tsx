@@ -3,7 +3,10 @@ import { PRODUCTS, CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
 import { addConsumption } from "@/lib/store";
 import { Card, Chip } from "@/components/ui";
-import { Check, X } from "lucide-react";
+import { Check, X, Users } from "lucide-react";
+
+// Products where cost can be split among several attendees
+const SHAREABLE_IDS = new Set(["bot-casa", "bot-premium", "cava", "taittinger", "veuve"]);
 
 export function AddConsumptionSheet({
   event,
@@ -17,6 +20,7 @@ export function AddConsumptionSheet({
   const [cat, setCat] = useState(CATEGORIES[0]);
   const [q, setQ] = useState("");
   const [pulseId, setPulseId] = useState<string | null>(null);
+  const [shareProduct, setShareProduct] = useState<Product | null>(null);
 
   const list = useMemo(() => {
     const base = q
@@ -25,13 +29,21 @@ export function AddConsumptionSheet({
     return base;
   }, [cat, q]);
 
-  const add = (p: Product) => {
-    addConsumption(event.id, attendee.id, p.id, price(p, attendee.socio), 1);
-    setPulseId(p.id);
+  const flashPulse = (id: string) => {
+    setPulseId(id);
     window.setTimeout(
-      () => setPulseId((current) => (current === p.id ? null : current)),
+      () => setPulseId((current) => (current === id ? null : current)),
       350,
     );
+  };
+
+  const add = (p: Product) => {
+    if (SHAREABLE_IDS.has(p.id)) {
+      setShareProduct(p);
+      return;
+    }
+    addConsumption(event.id, attendee.id, p.id, price(p, attendee.socio), 1);
+    flashPulse(p.id);
   };
 
   return (
@@ -76,6 +88,7 @@ export function AddConsumptionSheet({
         <div className="overflow-y-auto p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {list.map((p) => {
             const active = pulseId === p.id;
+            const shareable = SHAREABLE_IDS.has(p.id);
             return (
               <button
                 key={p.id}
@@ -87,7 +100,10 @@ export function AddConsumptionSheet({
                 }`}
               >
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{p.name}</div>
+                  <div className="font-medium truncate flex items-center gap-1.5">
+                    {p.name}
+                    {shareable && <Users className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
+                  </div>
                   {p.info && <div className="text-xs text-muted-foreground truncate">{p.info}</div>}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -107,6 +123,135 @@ export function AddConsumptionSheet({
         <div className="p-3 border-t border-border">
           <button className="btn-primary w-full" onClick={onClose}>
             Hecho
+          </button>
+        </div>
+      </Card>
+
+      {shareProduct && (
+        <ShareDialog
+          event={event}
+          defaultAttendee={attendee}
+          product={shareProduct}
+          onClose={() => setShareProduct(null)}
+          onConfirm={(ids, totalPrice) => {
+            const per = totalPrice / ids.length;
+            ids.forEach((id) => {
+              addConsumption(event.id, id, shareProduct.id, per, 1);
+            });
+            flashPulse(shareProduct.id);
+            setShareProduct(null);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function ShareDialog({
+  event,
+  defaultAttendee,
+  product,
+  onClose,
+  onConfirm,
+}: {
+  event: Event;
+  defaultAttendee: Attendee;
+  product: Product;
+  onClose: () => void;
+  onConfirm: (attendeeIds: string[], totalPrice: number) => void;
+}) {
+  const [selected, setSelected] = useState<Set<string>>(
+    () => new Set([defaultAttendee.id]),
+  );
+
+  const toggle = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const allIds = event.attendees.map((a) => a.id);
+  const allSelected = selected.size === allIds.length;
+
+  // Price basis: use socio price if the buyer (defaultAttendee) is socio.
+  // If any selected attendee is not socio, use noSocio price to keep it fair.
+  const anyNoSocio = event.attendees
+    .filter((a) => selected.has(a.id))
+    .some((a) => !a.socio);
+  const total = anyNoSocio ? product.noSocio : product.socio;
+  const per = selected.size > 0 ? total / selected.size : 0;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4">
+      <Card className="w-full sm:max-w-md flex flex-col rounded-b-none sm:rounded-xl">
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold truncate">{product.name}</h3>
+            <p className="text-xs text-muted-foreground">
+              ¿Entre quién repartimos el coste?
+            </p>
+          </div>
+          <button className="btn-ghost !p-2" onClick={onClose} aria-label="Cerrar">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-3 border-b border-border flex items-center justify-between text-sm">
+          <span className="text-muted-foreground">
+            Total: <span className="font-semibold text-foreground">{fmt(total)}</span>
+          </span>
+          <button
+            className="chip bg-muted text-muted-foreground"
+            onClick={() =>
+              setSelected(allSelected ? new Set() : new Set(allIds))
+            }
+          >
+            {allSelected ? "Ninguno" : "Todos"}
+          </button>
+        </div>
+
+        <div className="overflow-y-auto max-h-[50vh] p-2">
+          {event.attendees.map((a) => {
+            const on = selected.has(a.id);
+            return (
+              <label
+                key={a.id}
+                className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
+                  on ? "bg-primary/15" : "hover:bg-muted"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={on}
+                  onChange={() => toggle(a.id)}
+                  className="w-4 h-4 accent-[color:var(--primary)]"
+                />
+                <span className="flex-1 font-medium">{a.name}</span>
+                <Chip tone={a.socio ? "socio" : "accent"}>
+                  {a.socio ? "Socio" : "No socio"}
+                </Chip>
+              </label>
+            );
+          })}
+        </div>
+
+        <div className="p-3 border-t border-border space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">
+              {selected.size} {selected.size === 1 ? "persona" : "personas"}
+            </span>
+            <span className="font-semibold text-primary">
+              {fmt(per)} / persona
+            </span>
+          </div>
+          <button
+            className="btn-primary w-full disabled:opacity-50"
+            disabled={selected.size === 0}
+            onClick={() => onConfirm(Array.from(selected), total)}
+          >
+            Añadir
           </button>
         </div>
       </Card>
