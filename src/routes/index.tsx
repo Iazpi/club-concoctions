@@ -73,6 +73,9 @@ function Index() {
             <TabBtn active={tab === "historico"} onClick={() => setTab("historico")} icon={<HistoryIcon className="w-4 h-4" />}>
               Histórico
             </TabBtn>
+            <TabBtn active={tab === "mvp"} onClick={() => setTab("mvp")} icon={<Trophy className="w-4 h-4" />}>
+              MVP del mes
+            </TabBtn>
             <TabBtn active={tab === "tarifa"} onClick={() => setTab("tarifa")} icon={<ListOrdered className="w-4 h-4" />}>
               Tarifa
             </TabBtn>
