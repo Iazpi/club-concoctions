@@ -90,6 +90,8 @@ function Index() {
           <EventList onOpen={(id) => setOpenId(id)} />
         ) : tab === "historico" ? (
           <History />
+        ) : tab === "mvp" ? (
+          <MvpMonth />
         ) : (
           <Tariff />
         )}
