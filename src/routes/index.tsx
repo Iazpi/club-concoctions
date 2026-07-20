@@ -5,7 +5,8 @@ import { EventList } from "@/components/EventList";
 import { EventView } from "@/components/EventView";
 import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
-import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered } from "lucide-react";
+import { MvpMonth } from "@/components/MvpMonth";
+import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Tab = "eventos" | "historico" | "tarifa";
+type Tab = "eventos" | "historico" | "mvp" | "tarifa";
 
 function Index() {
   const [tab, setTab] = useState<Tab>("eventos");
@@ -72,6 +73,9 @@ function Index() {
             <TabBtn active={tab === "historico"} onClick={() => setTab("historico")} icon={<HistoryIcon className="w-4 h-4" />}>
               Histórico
             </TabBtn>
+            <TabBtn active={tab === "mvp"} onClick={() => setTab("mvp")} icon={<Trophy className="w-4 h-4" />}>
+              MVP del mes
+            </TabBtn>
             <TabBtn active={tab === "tarifa"} onClick={() => setTab("tarifa")} icon={<ListOrdered className="w-4 h-4" />}>
               Tarifa
             </TabBtn>
@@ -86,6 +90,8 @@ function Index() {
           <EventList onOpen={(id) => setOpenId(id)} />
         ) : tab === "historico" ? (
           <History />
+        ) : tab === "mvp" ? (
+          <MvpMonth />
         ) : (
           <Tariff />
         )}
