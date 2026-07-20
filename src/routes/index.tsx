@@ -5,7 +5,8 @@ import { EventList } from "@/components/EventList";
 import { EventView } from "@/components/EventView";
 import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
-import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered } from "lucide-react";
+import { MvpMonth } from "@/components/MvpMonth";
+import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
