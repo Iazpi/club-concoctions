@@ -6,7 +6,7 @@ import { Card, Chip } from "@/components/ui";
 import { Check, X, Users } from "lucide-react";
 
 // Products where cost can be split among several attendees
-const SHAREABLE_IDS = new Set(["bot-casa", "bot-premium", "cava", "taittinger", "veuve"]);
+const SHAREABLE_IDS = new Set(["bot-casa", "bot-premium", "cava", "taittinger", "veuve", "agua-gr"]);
 
 export function AddConsumptionSheet({
   event,
