@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Tab = "eventos" | "historico" | "tarifa";
+type Tab = "eventos" | "historico" | "mvp" | "tarifa";
 
 function Index() {
   const [tab, setTab] = useState<Tab>("eventos");
