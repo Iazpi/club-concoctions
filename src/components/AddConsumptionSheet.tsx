@@ -175,12 +175,8 @@ function ShareDialog({
   const allIds = event.attendees.map((a) => a.id);
   const allSelected = selected.size === allIds.length;
 
-  // Price basis: use socio price if the buyer (defaultAttendee) is socio.
-  // If any selected attendee is not socio, use noSocio price to keep it fair.
-  const anyNoSocio = event.attendees
-    .filter((a) => selected.has(a.id))
-    .some((a) => !a.socio);
-  const total = anyNoSocio ? product.noSocio : product.socio;
+  // Price basis depends on the buyer/attendee that adds the bottle.
+  const total = defaultAttendee.socio ? product.socio : product.noSocio;
   const per = selected.size > 0 ? total / selected.size : 0;
 
   return (
