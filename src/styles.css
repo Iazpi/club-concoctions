@@ -79,7 +79,7 @@
   @apply btn bg-destructive text-destructive-foreground hover:bg-destructive/90;
 }
 @utility input-base {
-  @apply w-full rounded-lg border border-input bg-white/75 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+  @apply w-full rounded-lg border border-input bg-white/50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
 }
 @utility card-base {
   @apply rounded-xl border border-border bg-card shadow-sm;
