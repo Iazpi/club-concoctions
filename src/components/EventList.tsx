@@ -111,18 +111,20 @@ function SubTabBtn({
   label,
   count,
   activeClass,
+  inactiveClass,
 }: {
   active: boolean;
   onClick: () => void;
   label: string;
   count: number;
   activeClass: string;
+  inactiveClass: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-        active ? activeClass : "border-transparent text-muted-foreground hover:text-foreground"
+      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 rounded-t-lg bg-white/30 transition-colors ${
+        active ? activeClass : `border-transparent text-muted-foreground hover:text-foreground hover:bg-white/45 ${inactiveClass}`
       }`}
     >
       {label}
