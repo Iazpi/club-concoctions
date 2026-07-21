@@ -57,20 +57,22 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
         </Card>
       ) : (
         <div className="space-y-4">
-          <div className="flex gap-1 border-b border-border">
+      <div className="flex gap-1 border-b border-border">
             <SubTabBtn
               active={subTab === "open"}
               onClick={() => setSubTab("open")}
               label="En curso"
               count={openEvents.length}
-              activeClass="border-socio text-socio"
+              activeClass="border-socio text-socio bg-white/30"
+              inactiveClass="hover:bg-white/45"
             />
             <SubTabBtn
               active={subTab === "closed"}
               onClick={() => setSubTab("closed")}
               label="Cerrados"
               count={closedEvents.length}
-              activeClass="border-destructive text-destructive"
+              activeClass="border-destructive text-destructive bg-white/30"
+              inactiveClass="hover:bg-white/45"
             />
           </div>
 
@@ -109,18 +111,20 @@ function SubTabBtn({
   label,
   count,
   activeClass,
+  inactiveClass,
 }: {
   active: boolean;
   onClick: () => void;
   label: string;
   count: number;
   activeClass: string;
+  inactiveClass: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-        active ? activeClass : "border-transparent text-muted-foreground hover:text-foreground"
+      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 rounded-t-lg bg-white/30 transition-colors ${
+        active ? activeClass : `border-transparent text-muted-foreground hover:text-foreground hover:bg-white/45 ${inactiveClass}`
       }`}
     >
       {label}
