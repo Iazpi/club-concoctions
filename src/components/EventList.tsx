@@ -115,7 +115,7 @@ function SubTabBtn({
   return (
     <button
       onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 bg-white/40 rounded-t-lg transition-colors ${
         active
           ? "border-primary text-primary"
           : "border-transparent text-muted-foreground hover:text-foreground"
