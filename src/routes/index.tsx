@@ -6,7 +6,7 @@ import { EventView } from "@/components/EventView";
 import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
-import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy } from "lucide-react";
+import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -64,6 +64,16 @@ function Index() {
               {event ? "Cuenta del evento" : "Gestión de consumiciones"}
             </p>
           </div>
+          {!event && (
+            <button
+              className="btn-ghost !p-2 text-info hover:bg-white/40"
+              onClick={() => window.location.reload()}
+              title="Recargar aplicación"
+              aria-label="Recargar aplicación"
+            >
+              <RefreshCw className="w-5 h-5" />
+            </button>
+          )}
         </div>
         {!event && (
           <nav className="max-w-3xl mx-auto px-2 flex gap-1">

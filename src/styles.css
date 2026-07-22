@@ -26,6 +26,8 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-socio: var(--socio);
   --color-socio-foreground: var(--socio-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --font-display: "Fraunces", Georgia, serif;
 }
 
@@ -48,6 +50,8 @@
   --ring: oklch(0.42 0.11 35);
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.985 0.008 85);
+  --info: oklch(0.55 0.18 245); /* azul */
+  --info-foreground: oklch(0.985 0.008 85);
 }
 
 @layer base {
