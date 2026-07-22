@@ -63,16 +63,12 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
               onClick={() => setSubTab("open")}
               label="En curso"
               count={openEvents.length}
-              activeClass="border-socio text-socio bg-white/30"
-              inactiveClass="hover:bg-white/45"
             />
             <SubTabBtn
               active={subTab === "closed"}
               onClick={() => setSubTab("closed")}
               label="Cerrados"
               count={closedEvents.length}
-              activeClass="border-destructive text-destructive bg-white/30"
-              inactiveClass="hover:bg-white/45"
             />
           </div>
 
@@ -110,27 +106,25 @@ function SubTabBtn({
   onClick,
   label,
   count,
-  activeClass,
-  inactiveClass,
 }: {
   active: boolean;
   onClick: () => void;
   label: string;
   count: number;
-  activeClass: string;
-  inactiveClass: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 rounded-t-lg bg-white/30 transition-colors ${
-        active ? activeClass : `border-transparent text-muted-foreground hover:text-foreground hover:bg-white/45 ${inactiveClass}`
+      className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+        active
+          ? "border-primary text-primary"
+          : "border-transparent text-muted-foreground hover:text-foreground"
       }`}
     >
       {label}
       <span
         className={`inline-flex items-center justify-center min-w-[1.25rem] h-5 rounded-full px-1.5 text-xs ${
-          active ? "bg-current text-background" : "bg-muted text-muted-foreground"
+          active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
         }`}
       >
         {count}
