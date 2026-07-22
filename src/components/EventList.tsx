@@ -63,16 +63,12 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
               onClick={() => setSubTab("open")}
               label="En curso"
               count={openEvents.length}
-              activeClass="border-socio text-socio bg-white/30"
-              inactiveClass="hover:bg-white/45"
             />
             <SubTabBtn
               active={subTab === "closed"}
               onClick={() => setSubTab("closed")}
               label="Cerrados"
               count={closedEvents.length}
-              activeClass="border-destructive text-destructive bg-white/30"
-              inactiveClass="hover:bg-white/45"
             />
           </div>
 
