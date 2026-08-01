@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { PRODUCTS, setActiveProducts, type Category, type Product } from "@/lib/catalog";
+
 
 export interface Attendee {
   id: string;
