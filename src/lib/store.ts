@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { PRODUCTS, setActiveProducts, type Category, type Product } from "@/lib/catalog";
+
 
 export interface Attendee {
   id: string;
@@ -29,6 +31,7 @@ export interface Event {
 export interface State {
   events: Event[];
   activeEventId: string | null;
+  products?: Product[];
 }
 
 const ROW_ID = "main";
@@ -37,7 +40,9 @@ const LOCAL_KEY = "barro-app-v1";
 const defaultState: State = { events: [], activeEventId: null };
 
 let state: State = loadLocal();
+setActiveProducts(state.products ?? PRODUCTS);
 const listeners = new Set<() => void>();
+
 
 // Serialize remote writes to avoid clobbering
 let writeChain: Promise<void> = Promise.resolve();
@@ -65,10 +70,12 @@ function saveLocal() {
 }
 
 function emit(pushRemote = true) {
+  setActiveProducts(state.products ?? PRODUCTS);
   saveLocal();
   listeners.forEach((l) => l());
   if (pushRemote) schedulePush();
 }
+
 
 function schedulePush() {
   const snapshot = state;
@@ -246,4 +253,46 @@ export function setEventClosed(eventId: string, v: boolean) {
 
 export function renameEvent(eventId: string, name: string, date: string) {
   updateEvent(eventId, (e) => ({ ...e, name, date }));
+}
+
+// ---- Productos (tarifa editable, compartida en la nube) ----
+export function useProducts(): Product[] {
+  return useStore((s) => s.products ?? PRODUCTS);
+}
+
+function setProducts(list: Product[]) {
+  state = { ...state, products: list };
+  emit();
+}
+
+export function updateProduct(id: string, patch: Partial<Product>) {
+  const list = (state.products ?? PRODUCTS).map((p) =>
+    p.id === id ? { ...p, ...patch } : p,
+  );
+  setProducts(list);
+}
+
+export function addProduct(category: Category) {
+  const list = state.products ?? PRODUCTS;
+  const nuevo: Product = {
+    id: `custom-${uid()}`,
+    name: "Nuevo ítem",
+    category,
+    socio: 0,
+    noSocio: 0,
+  };
+  // Insert right after the last item of the same category
+  const idx = list.map((p) => p.category).lastIndexOf(category);
+  const next = [...list];
+  next.splice(idx >= 0 ? idx + 1 : next.length, 0, nuevo);
+  setProducts(next);
+  return nuevo.id;
+}
+
+export function deleteProduct(id: string) {
+  setProducts((state.products ?? PRODUCTS).filter((p) => p.id !== id));
+}
+
+export function resetProducts() {
+  setProducts(PRODUCTS);
 }
