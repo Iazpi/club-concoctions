@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { PRODUCTS, CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
+import { CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
-import { addConsumption } from "@/lib/store";
+import { addConsumption, useProducts } from "@/lib/store";
+
 import { Card, Chip } from "@/components/ui";
 import { Check, X, Users } from "lucide-react";
 
