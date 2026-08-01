@@ -93,6 +93,14 @@ export const SOCIOS: string[] = [
   "Azpi",
 ];
 
-export const getProduct = (id: string) => PRODUCTS.find((x) => x.id === id);
+// Listado activo (puede ser sobreescrito por el estado compartido en la nube)
+let ACTIVE_PRODUCTS: Product[] = PRODUCTS;
+export const setActiveProducts = (list: Product[]) => {
+  ACTIVE_PRODUCTS = list;
+};
+export const getActiveProducts = () => ACTIVE_PRODUCTS;
+
+export const getProduct = (id: string) => ACTIVE_PRODUCTS.find((x) => x.id === id);
 export const price = (prod: Product, socio: boolean) => (socio ? prod.socio : prod.noSocio);
 export const fmt = (n: number) => `${n.toFixed(2).replace(".", ",")} €`;
+
