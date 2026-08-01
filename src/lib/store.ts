@@ -254,3 +254,45 @@ export function setEventClosed(eventId: string, v: boolean) {
 export function renameEvent(eventId: string, name: string, date: string) {
   updateEvent(eventId, (e) => ({ ...e, name, date }));
 }
+
+// ---- Productos (tarifa editable, compartida en la nube) ----
+export function useProducts(): Product[] {
+  return useStore((s) => s.products ?? PRODUCTS);
+}
+
+function setProducts(list: Product[]) {
+  state = { ...state, products: list };
+  emit();
+}
+
+export function updateProduct(id: string, patch: Partial<Product>) {
+  const list = (state.products ?? PRODUCTS).map((p) =>
+    p.id === id ? { ...p, ...patch } : p,
+  );
+  setProducts(list);
+}
+
+export function addProduct(category: Category) {
+  const list = state.products ?? PRODUCTS;
+  const nuevo: Product = {
+    id: `custom-${uid()}`,
+    name: "Nuevo ítem",
+    category,
+    socio: 0,
+    noSocio: 0,
+  };
+  // Insert right after the last item of the same category
+  const idx = list.map((p) => p.category).lastIndexOf(category);
+  const next = [...list];
+  next.splice(idx >= 0 ? idx + 1 : next.length, 0, nuevo);
+  setProducts(next);
+  return nuevo.id;
+}
+
+export function deleteProduct(id: string) {
+  setProducts((state.products ?? PRODUCTS).filter((p) => p.id !== id));
+}
+
+export function resetProducts() {
+  setProducts(PRODUCTS);
+}
