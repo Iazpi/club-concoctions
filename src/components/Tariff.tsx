@@ -2,7 +2,7 @@ import { CATEGORIES, fmt, type Product } from "@/lib/catalog";
 import { useProducts, updateProduct, addProduct, deleteProduct } from "@/lib/store";
 import { Card } from "@/components/ui";
 import { Plus, Trash2, Pencil, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Tariff() {
   const products = useProducts();
