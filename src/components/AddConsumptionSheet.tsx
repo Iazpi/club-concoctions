@@ -18,6 +18,7 @@ export function AddConsumptionSheet({
   attendee: Attendee;
   onClose: () => void;
 }) {
+  const products = useProducts();
   const [cat, setCat] = useState(CATEGORIES[0]);
   const [q, setQ] = useState("");
   const [pulseId, setPulseId] = useState<string | null>(null);
@@ -25,10 +26,11 @@ export function AddConsumptionSheet({
 
   const list = useMemo(() => {
     const base = q
-      ? PRODUCTS.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()))
-      : PRODUCTS.filter((p) => p.category === cat);
+      ? products.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()))
+      : products.filter((p) => p.category === cat);
     return base;
-  }, [cat, q]);
+  }, [cat, q, products]);
+
 
   const flashPulse = (id: string) => {
     setPulseId(id);
