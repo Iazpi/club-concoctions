@@ -31,6 +31,7 @@ export interface Event {
 export interface State {
   events: Event[];
   activeEventId: string | null;
+  products?: Product[];
 }
 
 const ROW_ID = "main";
@@ -39,7 +40,9 @@ const LOCAL_KEY = "barro-app-v1";
 const defaultState: State = { events: [], activeEventId: null };
 
 let state: State = loadLocal();
+setActiveProducts(state.products ?? PRODUCTS);
 const listeners = new Set<() => void>();
+
 
 // Serialize remote writes to avoid clobbering
 let writeChain: Promise<void> = Promise.resolve();
