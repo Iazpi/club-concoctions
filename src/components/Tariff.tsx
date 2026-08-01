@@ -2,7 +2,7 @@ import { CATEGORIES, fmt, type Product } from "@/lib/catalog";
 import { useProducts, updateProduct, addProduct, deleteProduct } from "@/lib/store";
 import { Card } from "@/components/ui";
 import { Plus, Trash2, Pencil, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Tariff() {
   const products = useProducts();
@@ -130,15 +130,36 @@ function EditRow({ p }: { p: Product }) {
 }
 
 function PriceInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const format = (v: number) =>
+    Number.isFinite(v) ? String(v).replace(".", ",") : "";
+  const [text, setText] = useState(() => format(value));
+  const [focused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (!focused) setText(format(value));
+  }, [value, focused]);
+
   return (
     <input
-      type="number"
-      step="0.5"
-      min="0"
+      type="text"
       inputMode="decimal"
       className="input-base !py-1 text-right tabular-nums"
-      value={Number.isFinite(value) ? value : 0}
-      onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+      value={text}
+      onFocus={() => setFocused(true)}
+      onBlur={() => {
+        setFocused(false);
+        setText(format(value));
+      }}
+      onChange={(e) => {
+        // solo dígitos y una coma/punto, máximo 1 decimal
+        let raw = e.target.value.replace(/[^\d.,]/g, "").replace(/\./g, ",");
+        const parts = raw.split(",");
+        raw = parts.length > 1 ? `${parts[0]},${parts.slice(1).join("").slice(0, 1)}` : parts[0];
+        setText(raw);
+        const n = parseFloat(raw.replace(",", "."));
+        onChange(Number.isFinite(n) ? n : 0);
+      }}
     />
   );
 }
+
