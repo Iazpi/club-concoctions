@@ -70,10 +70,12 @@ function saveLocal() {
 }
 
 function emit(pushRemote = true) {
+  setActiveProducts(state.products ?? PRODUCTS);
   saveLocal();
   listeners.forEach((l) => l());
   if (pushRemote) schedulePush();
 }
+
 
 function schedulePush() {
   const snapshot = state;
