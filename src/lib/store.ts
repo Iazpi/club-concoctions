@@ -7,6 +7,7 @@ export interface Attendee {
   id: string;
   name: string;
   socio: boolean;
+  paid?: boolean;
 }
 
 export interface Consumption {

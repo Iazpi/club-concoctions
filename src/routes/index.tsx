@@ -64,16 +64,15 @@ function Index() {
               {event ? "Cuenta del evento" : "Gestión de consumiciones"}
             </p>
           </div>
-          {!event && (
-            <button
-              className="btn-ghost !p-2 text-info hover:bg-white/40"
-              onClick={() => window.location.reload()}
-              title="Recargar aplicación"
-              aria-label="Recargar aplicación"
-            >
-              <RefreshCw className="w-5 h-5" />
-            </button>
-          )}
+          <button
+            className="btn-ghost !p-2 text-info hover:bg-white/40"
+            onClick={() => window.location.reload()}
+            title="Recargar aplicación"
+            aria-label="Recargar aplicación"
+          >
+            <RefreshCw className="w-5 h-5" />
+          </button>
+
         </div>
         {!event && (
           <nav className="max-w-3xl mx-auto px-2 flex gap-1">
