@@ -166,10 +166,10 @@ export function EventView({ event }: { event: Event }) {
         {totals.map(({ a, items, subtotal }) => {
           const total = subtotal + cleaningPer;
           return (
-            <Card key={a.id} className="p-4">
+            <Card key={a.id} className={`p-4 ${a.paid ? "opacity-60" : ""}`}>
               <div className="flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-base">{a.name}</span>
+                  <span className={`font-semibold text-base ${a.paid ? "line-through" : ""}`}>{a.name}</span>
                   <button
                     onClick={() => updateAttendee(event.id, a.id, { socio: !a.socio })}
                     className="hover:opacity-80"
@@ -179,7 +179,7 @@ export function EventView({ event }: { event: Event }) {
                   </button>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-lg font-bold text-primary">{fmt(total)}</span>
+                  <span className={`text-lg font-bold text-primary ${a.paid ? "line-through" : ""}`}>{fmt(total)}</span>
                   {!event.closed && (
                     <button
                       className="btn-ghost !p-2 text-destructive"
@@ -192,6 +192,17 @@ export function EventView({ event }: { event: Event }) {
                   )}
                 </div>
               </div>
+
+              <label className="mt-2 flex items-center gap-2 text-sm w-fit cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!!a.paid}
+                  onChange={(e) => updateAttendee(event.id, a.id, { paid: e.target.checked })}
+                  className="w-4 h-4 accent-[color:var(--primary)]"
+                />
+                <span className={a.paid ? "text-primary font-medium" : "text-muted-foreground"}>Pagado</span>
+              </label>
+
 
               {items.length > 0 && (
                 <ul className="mt-3 space-y-1.5 text-sm">
