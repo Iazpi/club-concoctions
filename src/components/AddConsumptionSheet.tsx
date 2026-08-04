@@ -135,8 +135,9 @@ export function AddConsumptionSheet({
           onClose={() => setShareProduct(null)}
           onConfirm={(ids, totalPrice) => {
             const per = totalPrice / ids.length;
+            const isSplit = ids.length > 1;
             ids.forEach((id) => {
-              addConsumption(event.id, id, shareProduct.id, per, 1, true);
+              addConsumption(event.id, id, shareProduct.id, per, 1, isSplit);
             });
             flashPulse(shareProduct.id);
             setShareProduct(null);
