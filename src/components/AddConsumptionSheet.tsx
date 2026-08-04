@@ -137,11 +137,12 @@ export function AddConsumptionSheet({
           onConfirm={(ids, totalPrice) => {
             const per = totalPrice / ids.length;
             ids.forEach((id) => {
-              addConsumption(event.id, id, shareProduct.id, per, 1);
+              addConsumption(event.id, id, shareProduct.id, per, 1, true);
             });
             flashPulse(shareProduct.id);
             setShareProduct(null);
           }}
+
         />
       )}
     </div>
