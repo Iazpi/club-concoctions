@@ -19,11 +19,22 @@ export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
 
+  // Detect shared consumptions (explicit flag or legacy heuristic)
+  const isShared = (c: Consumption) => {
+    if (c.shared) return true;
+    const p = getProduct(c.productId);
+    if (!p) return false;
+    return (
+      SHAREABLE_IDS.has(p.id) && c.unitPrice < p.socio && c.unitPrice < p.noSocio
+    );
+  };
+
   const totals = event.attendees.map((a) => {
     const items = event.consumptions.filter((c) => c.attendeeId === a.id);
     const subtotal = items.reduce((s, c) => s + c.unitPrice * c.qty, 0);
     return { a, items, subtotal };
   });
+
 
   const cleaningPer =
     event.splitCleaning && event.attendees.length > 0
