@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Event, Attendee } from "@/lib/store";
+import type { Event, Attendee, Consumption } from "@/lib/store";
 import {
   addAttendee,
   removeAttendee,
@@ -9,20 +9,32 @@ import {
   setEventClosed,
   deleteEvent,
 } from "@/lib/store";
-import { getProduct, fmt, CLEANING_COST, SOCIOS } from "@/lib/catalog";
+import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS } from "@/lib/catalog";
 import { Card, Chip } from "@/components/ui";
 import { AddConsumptionSheet } from "./AddConsumptionSheet";
 import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
+
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
+
+  // Detect shared consumptions (explicit flag or legacy heuristic)
+  const isShared = (c: Consumption) => {
+    if (c.shared) return true;
+    const p = getProduct(c.productId);
+    if (!p) return false;
+    return (
+      SHAREABLE_IDS.has(p.id) && c.unitPrice < p.socio && c.unitPrice < p.noSocio
+    );
+  };
 
   const totals = event.attendees.map((a) => {
     const items = event.consumptions.filter((c) => c.attendeeId === a.id);
     const subtotal = items.reduce((s, c) => s + c.unitPrice * c.qty, 0);
     return { a, items, subtotal };
   });
+
 
   const cleaningPer =
     event.splitCleaning && event.attendees.length > 0
@@ -208,11 +220,20 @@ export function EventView({ event }: { event: Event }) {
                 <ul className="mt-3 space-y-1.5 text-sm">
                   {items.map((c) => {
                     const p = getProduct(c.productId);
+                    const shared = isShared(c);
                     return (
                       <li key={c.id} className="flex items-center justify-between gap-2">
-                        <span className="truncate">{p?.name ?? c.productId}</span>
+                        <span className="truncate flex items-center gap-1.5">
+                          {shared && (
+                            <Users className="w-3.5 h-3.5 text-info shrink-0" />
+                          )}
+                          {p?.name ?? c.productId}
+                          {shared && (
+                            <span className="text-xs text-muted-foreground">· compartida</span>
+                          )}
+                        </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          {!event.closed && (
+                          {!event.closed && !shared && (
                             <button
                               className="btn-ghost !p-1"
                               onClick={() => updateConsumptionQty(event.id, c.id, c.qty - 1)}
@@ -220,8 +241,10 @@ export function EventView({ event }: { event: Event }) {
                               <Minus className="w-3.5 h-3.5" />
                             </button>
                           )}
-                          <span className="w-6 text-center font-medium">{c.qty}</span>
-                          {!event.closed && (
+                          {!shared && (
+                            <span className="w-6 text-center font-medium">{c.qty}</span>
+                          )}
+                          {!event.closed && !shared && (
                             <button
                               className="btn-ghost !p-1"
                               onClick={() => updateConsumptionQty(event.id, c.id, c.qty + 1)}
@@ -229,15 +252,19 @@ export function EventView({ event }: { event: Event }) {
                               <Plus className="w-3.5 h-3.5" />
                             </button>
                           )}
-                          <span className="w-16 text-right tabular-nums font-medium">
-                            {fmt(c.unitPrice * c.qty)}
-                          </span>
+                          <div className="flex items-center gap-1">
+                            {shared && <span className="text-info text-xs">÷</span>}
+                            <span className="w-16 text-right tabular-nums font-medium">
+                              {fmt(c.unitPrice * c.qty)}
+                            </span>
+                          </div>
                         </div>
                       </li>
                     );
                   })}
                 </ul>
               )}
+
 
               {event.splitCleaning && (
                 <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground flex justify-between">

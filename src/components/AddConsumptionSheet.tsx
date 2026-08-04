@@ -1,13 +1,11 @@
 import { useMemo, useState } from "react";
-import { CATEGORIES, price, fmt, type Product } from "@/lib/catalog";
+import { CATEGORIES, SHAREABLE_IDS, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
 import { addConsumption, useProducts } from "@/lib/store";
 
 import { Card, Chip } from "@/components/ui";
 import { Check, X, Users } from "lucide-react";
 
-// Products where cost can be split among several attendees
-const SHAREABLE_IDS = new Set(["bot-casa", "bot-premium", "cava", "taittinger", "veuve", "agua-gr"]);
 
 export function AddConsumptionSheet({
   event,
@@ -139,11 +137,12 @@ export function AddConsumptionSheet({
           onConfirm={(ids, totalPrice) => {
             const per = totalPrice / ids.length;
             ids.forEach((id) => {
-              addConsumption(event.id, id, shareProduct.id, per, 1);
+              addConsumption(event.id, id, shareProduct.id, per, 1, true);
             });
             flashPulse(shareProduct.id);
             setShareProduct(null);
           }}
+
         />
       )}
     </div>

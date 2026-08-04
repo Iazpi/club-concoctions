@@ -81,6 +81,17 @@ export const CATEGORIES: Category[] = [
 
 export const CLEANING_COST = 24;
 
+// Productos cuyo coste puede repartirse entre varios asistentes
+export const SHAREABLE_IDS = new Set([
+  "bot-casa",
+  "bot-premium",
+  "cava",
+  "taittinger",
+  "veuve",
+  "agua-gr",
+]);
+
+
 export const SOCIOS: string[] = [
   "Cata",
   "Edu",
