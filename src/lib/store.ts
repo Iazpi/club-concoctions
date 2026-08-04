@@ -17,7 +17,9 @@ export interface Consumption {
   unitPrice: number; // price at moment of adding
   qty: number;
   ts: number;
+  shared?: boolean; // true when the cost is split among several attendees
 }
+
 
 export interface Event {
   id: string;
