@@ -219,15 +219,17 @@ export function addConsumption(
   productId: string,
   unitPrice: number,
   qty = 1,
+  shared = false,
 ) {
   updateEvent(eventId, (e) => ({
     ...e,
     consumptions: [
       ...e.consumptions,
-      { id: uid(), attendeeId, productId, unitPrice, qty, ts: Date.now() },
+      { id: uid(), attendeeId, productId, unitPrice, qty, ts: Date.now(), shared },
     ],
   }));
 }
+
 
 export function updateConsumptionQty(eventId: string, consId: string, qty: number) {
   updateEvent(eventId, (e) => ({
