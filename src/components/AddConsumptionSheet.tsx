@@ -4,7 +4,7 @@ import type { Attendee, Event } from "@/lib/store";
 import { addConsumption, useProducts } from "@/lib/store";
 
 import { Card, Chip } from "@/components/ui";
-import { Check, X, Users } from "lucide-react";
+import { Check, X } from "lucide-react";
 
 
 export function AddConsumptionSheet({
@@ -103,7 +103,6 @@ export function AddConsumptionSheet({
                 <div className="min-w-0">
                   <div className="font-medium truncate flex items-center gap-1.5">
                     {p.name}
-                    {shareable && <Users className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
                   </div>
                   {p.info && <div className="text-xs text-muted-foreground truncate">{p.info}</div>}
                 </div>
