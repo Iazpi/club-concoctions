@@ -220,11 +220,20 @@ export function EventView({ event }: { event: Event }) {
                 <ul className="mt-3 space-y-1.5 text-sm">
                   {items.map((c) => {
                     const p = getProduct(c.productId);
+                    const shared = isShared(c);
                     return (
                       <li key={c.id} className="flex items-center justify-between gap-2">
-                        <span className="truncate">{p?.name ?? c.productId}</span>
+                        <span className="truncate flex items-center gap-1.5">
+                          {shared && (
+                            <Users className="w-3.5 h-3.5 text-info shrink-0" />
+                          )}
+                          {p?.name ?? c.productId}
+                          {shared && (
+                            <span className="text-xs text-muted-foreground">· compartida</span>
+                          )}
+                        </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          {!event.closed && (
+                          {!event.closed && !shared && (
                             <button
                               className="btn-ghost !p-1"
                               onClick={() => updateConsumptionQty(event.id, c.id, c.qty - 1)}
@@ -232,8 +241,10 @@ export function EventView({ event }: { event: Event }) {
                               <Minus className="w-3.5 h-3.5" />
                             </button>
                           )}
-                          <span className="w-6 text-center font-medium">{c.qty}</span>
-                          {!event.closed && (
+                          {!shared && (
+                            <span className="w-6 text-center font-medium">{c.qty}</span>
+                          )}
+                          {!event.closed && !shared && (
                             <button
                               className="btn-ghost !p-1"
                               onClick={() => updateConsumptionQty(event.id, c.id, c.qty + 1)}
@@ -241,15 +252,19 @@ export function EventView({ event }: { event: Event }) {
                               <Plus className="w-3.5 h-3.5" />
                             </button>
                           )}
-                          <span className="w-16 text-right tabular-nums font-medium">
-                            {fmt(c.unitPrice * c.qty)}
-                          </span>
+                          <div className="flex items-center gap-1">
+                            {shared && <span className="text-info text-xs">÷</span>}
+                            <span className="w-16 text-right tabular-nums font-medium">
+                              {fmt(c.unitPrice * c.qty)}
+                            </span>
+                          </div>
                         </div>
                       </li>
                     );
                   })}
                 </ul>
               )}
+
 
               {event.splitCleaning && (
                 <div className="mt-2 pt-2 border-t border-border text-xs text-muted-foreground flex justify-between">
