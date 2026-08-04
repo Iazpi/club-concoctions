@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Event, Attendee } from "@/lib/store";
+import type { Event, Attendee, Consumption } from "@/lib/store";
 import {
   addAttendee,
   removeAttendee,
@@ -9,10 +9,11 @@ import {
   setEventClosed,
   deleteEvent,
 } from "@/lib/store";
-import { getProduct, fmt, CLEANING_COST, SOCIOS } from "@/lib/catalog";
+import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS } from "@/lib/catalog";
 import { Card, Chip } from "@/components/ui";
 import { AddConsumptionSheet } from "./AddConsumptionSheet";
 import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
+
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
