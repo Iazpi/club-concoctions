@@ -18,6 +18,7 @@ export interface Consumption {
   qty: number;
   ts: number;
   shared?: boolean; // true when the cost is split among several attendees
+  groupId?: string; // links all parts of the same shared item
 }
 
 
@@ -220,14 +221,66 @@ export function addConsumption(
   unitPrice: number,
   qty = 1,
   shared = false,
+  groupId?: string,
 ) {
   updateEvent(eventId, (e) => ({
     ...e,
     consumptions: [
       ...e.consumptions,
-      { id: uid(), attendeeId, productId, unitPrice, qty, ts: Date.now(), shared },
+      { id: uid(), attendeeId, productId, unitPrice, qty, ts: Date.now(), shared, groupId },
     ],
   }));
+}
+
+// Adds a shared item splitting the total price among the given attendees
+export function addSharedConsumption(
+  eventId: string,
+  attendeeIds: string[],
+  productId: string,
+  totalPrice: number,
+) {
+  const gid = uid();
+  const isSplit = attendeeIds.length > 1;
+  const per = totalPrice / attendeeIds.length;
+  updateEvent(eventId, (e) => ({
+    ...e,
+    consumptions: [
+      ...e.consumptions,
+      ...attendeeIds.map((attendeeId) => ({
+        id: uid(),
+        attendeeId,
+        productId,
+        unitPrice: per,
+        qty: 1,
+        ts: Date.now(),
+        shared: isSplit,
+        groupId: isSplit ? gid : undefined,
+      })),
+    ],
+  }));
+}
+
+// Removes every part of a shared item (all attendees involved)
+export function removeSharedGroup(eventId: string, consId: string) {
+  updateEvent(eventId, (e) => {
+    const target = e.consumptions.find((c) => c.id === consId);
+    if (!target) return e;
+    if (target.groupId) {
+      return { ...e, consumptions: e.consumptions.filter((c) => c.groupId !== target.groupId) };
+    }
+    // Legacy data without groupId: match same product, price and near timestamp
+    return {
+      ...e,
+      consumptions: e.consumptions.filter(
+        (c) =>
+          !(
+            c.productId === target.productId &&
+            Math.abs(c.unitPrice - target.unitPrice) < 0.005 &&
+            Math.abs(c.ts - target.ts) < 5000
+          ),
+      ),
+    };
+  });
 }
 
 
