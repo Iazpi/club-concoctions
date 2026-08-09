@@ -149,7 +149,7 @@ export function AddConsumptionSheet({
   );
 }
 
-function ShareDialog({
+export function ShareDialog({
   event,
   defaultAttendee,
   product,
