@@ -6,7 +6,8 @@ import {
   updateAttendee,
   updateConsumptionQty,
   removeConsumption,
-  addConsumption,
+  addSharedConsumption,
+  removeSharedGroup,
   setSplitCleaning,
   setEventClosed,
   deleteEvent,
@@ -242,7 +243,9 @@ export function EventView({ event }: { event: Event }) {
                               className="btn-ghost !p-1"
                               onClick={() =>
                                 shared
-                                  ? removeConsumption(event.id, c.id)
+                                  ? (confirm(
+                                      `Esta consumición está repartida entre varios. Se eliminará para todos los que la compartan. ¿Continuar?`,
+                                    ) && removeSharedGroup(event.id, c.id))
                                   : updateConsumptionQty(event.id, c.id, c.qty - 1)
                               }
                             >
@@ -315,11 +318,7 @@ export function EventView({ event }: { event: Event }) {
           product={reshare.product}
           onClose={() => setReshare(null)}
           onConfirm={(ids, totalPrice) => {
-            const per = totalPrice / ids.length;
-            const isSplit = ids.length > 1;
-            ids.forEach((id) => {
-              addConsumption(event.id, id, reshare.product.id, per, 1, isSplit);
-            });
+            addSharedConsumption(event.id, ids, reshare.product.id, totalPrice);
             setReshare(null);
           }}
         />
