@@ -5,7 +5,6 @@ import {
   removeAttendee,
   updateAttendee,
   updateConsumptionQty,
-  removeConsumption,
   addSharedConsumption,
   removeSharedGroup,
   setSplitCleaning,
