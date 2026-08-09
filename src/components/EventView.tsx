@@ -5,19 +5,23 @@ import {
   removeAttendee,
   updateAttendee,
   updateConsumptionQty,
+  removeConsumption,
+  addConsumption,
   setSplitCleaning,
   setEventClosed,
   deleteEvent,
 } from "@/lib/store";
-import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS } from "@/lib/catalog";
+import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS, type Product } from "@/lib/catalog";
 import { Card, Chip } from "@/components/ui";
-import { AddConsumptionSheet } from "./AddConsumptionSheet";
+import { AddConsumptionSheet, ShareDialog } from "./AddConsumptionSheet";
 import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
+  const [reshare, setReshare] = useState<{ product: Product; attendee: Attendee } | null>(null);
+
 
   // Detect shared consumptions: flagged as shared AND actually split (unit
   // price below the full product price)
