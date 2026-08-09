@@ -5,19 +5,23 @@ import {
   removeAttendee,
   updateAttendee,
   updateConsumptionQty,
+  removeConsumption,
+  addConsumption,
   setSplitCleaning,
   setEventClosed,
   deleteEvent,
 } from "@/lib/store";
-import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS } from "@/lib/catalog";
+import { getProduct, fmt, CLEANING_COST, SHAREABLE_IDS, SOCIOS, type Product } from "@/lib/catalog";
 import { Card, Chip } from "@/components/ui";
-import { AddConsumptionSheet } from "./AddConsumptionSheet";
+import { AddConsumptionSheet, ShareDialog } from "./AddConsumptionSheet";
 import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
+  const [reshare, setReshare] = useState<{ product: Product; attendee: Attendee } | null>(null);
+
 
   // Detect shared consumptions: flagged as shared AND actually split (unit
   // price below the full product price)
@@ -233,10 +237,14 @@ export function EventView({ event }: { event: Event }) {
                           )}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          {!event.closed && !shared && (
+                          {!event.closed && (
                             <button
                               className="btn-ghost !p-1"
-                              onClick={() => updateConsumptionQty(event.id, c.id, c.qty - 1)}
+                              onClick={() =>
+                                shared
+                                  ? removeConsumption(event.id, c.id)
+                                  : updateConsumptionQty(event.id, c.id, c.qty - 1)
+                              }
                             >
                               <Minus className="w-3.5 h-3.5" />
                             </button>
@@ -244,16 +252,21 @@ export function EventView({ event }: { event: Event }) {
                           {!shared && (
                             <span className="w-6 text-center font-medium">{c.qty}</span>
                           )}
-                          {!event.closed && !shared && (
+                          {!event.closed && (
                             <button
                               className="btn-ghost !p-1"
-                              onClick={() => updateConsumptionQty(event.id, c.id, c.qty + 1)}
+                              onClick={() => {
+                                if (shared) {
+                                  if (p) setReshare({ product: p, attendee: a });
+                                } else {
+                                  updateConsumptionQty(event.id, c.id, c.qty + 1);
+                                }
+                              }}
                             >
                               <Plus className="w-3.5 h-3.5" />
                             </button>
                           )}
                           <div className="flex items-center gap-1">
-                            {shared && <span className="text-info text-xs">÷</span>}
                             <span className="w-16 text-right tabular-nums font-medium">
                               {fmt(c.unitPrice * c.qty)}
                             </span>
@@ -264,6 +277,7 @@ export function EventView({ event }: { event: Event }) {
                   })}
                 </ul>
               )}
+
 
 
               {event.splitCleaning && (
@@ -291,6 +305,23 @@ export function EventView({ event }: { event: Event }) {
           event={event}
           attendee={sheetAtt}
           onClose={() => setSheetAtt(null)}
+        />
+      )}
+
+      {reshare && (
+        <ShareDialog
+          event={event}
+          defaultAttendee={reshare.attendee}
+          product={reshare.product}
+          onClose={() => setReshare(null)}
+          onConfirm={(ids, totalPrice) => {
+            const per = totalPrice / ids.length;
+            const isSplit = ids.length > 1;
+            ids.forEach((id) => {
+              addConsumption(event.id, id, reshare.product.id, per, 1, isSplit);
+            });
+            setReshare(null);
+          }}
         />
       )}
     </div>
