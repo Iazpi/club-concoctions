@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { CATEGORIES, SHAREABLE_IDS, price, fmt, type Product } from "@/lib/catalog";
 import type { Attendee, Event } from "@/lib/store";
-import { addConsumption, useProducts } from "@/lib/store";
+import { addConsumption, addSharedConsumption, useProducts } from "@/lib/store";
 
 import { Card, Chip } from "@/components/ui";
 import { Check, X } from "lucide-react";
