@@ -307,6 +307,23 @@ export function EventView({ event }: { event: Event }) {
           onClose={() => setSheetAtt(null)}
         />
       )}
+
+      {reshare && (
+        <ShareDialog
+          event={event}
+          defaultAttendee={reshare.attendee}
+          product={reshare.product}
+          onClose={() => setReshare(null)}
+          onConfirm={(ids, totalPrice) => {
+            const per = totalPrice / ids.length;
+            const isSplit = ids.length > 1;
+            ids.forEach((id) => {
+              addConsumption(event.id, id, reshare.product.id, per, 1, isSplit);
+            });
+            setReshare(null);
+          }}
+        />
+      )}
     </div>
   );
 }
