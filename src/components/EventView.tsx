@@ -233,10 +233,14 @@ export function EventView({ event }: { event: Event }) {
                           )}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          {!event.closed && !shared && (
+                          {!event.closed && (
                             <button
                               className="btn-ghost !p-1"
-                              onClick={() => updateConsumptionQty(event.id, c.id, c.qty - 1)}
+                              onClick={() =>
+                                shared
+                                  ? removeConsumption(event.id, c.id)
+                                  : updateConsumptionQty(event.id, c.id, c.qty - 1)
+                              }
                             >
                               <Minus className="w-3.5 h-3.5" />
                             </button>
@@ -244,16 +248,21 @@ export function EventView({ event }: { event: Event }) {
                           {!shared && (
                             <span className="w-6 text-center font-medium">{c.qty}</span>
                           )}
-                          {!event.closed && !shared && (
+                          {!event.closed && (
                             <button
                               className="btn-ghost !p-1"
-                              onClick={() => updateConsumptionQty(event.id, c.id, c.qty + 1)}
+                              onClick={() => {
+                                if (shared) {
+                                  if (p) setReshare({ product: p, attendee: a });
+                                } else {
+                                  updateConsumptionQty(event.id, c.id, c.qty + 1);
+                                }
+                              }}
                             >
                               <Plus className="w-3.5 h-3.5" />
                             </button>
                           )}
                           <div className="flex items-center gap-1">
-                            {shared && <span className="text-info text-xs">÷</span>}
                             <span className="w-16 text-right tabular-nums font-medium">
                               {fmt(c.unitPrice * c.qty)}
                             </span>
@@ -264,6 +273,7 @@ export function EventView({ event }: { event: Event }) {
                   })}
                 </ul>
               )}
+
 
 
               {event.splitCleaning && (
