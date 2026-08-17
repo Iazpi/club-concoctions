@@ -6,7 +6,8 @@ import { EventView } from "@/components/EventView";
 import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
-import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy, RefreshCw } from "lucide-react";
+import { Reservations } from "@/components/Reservations";
+import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Tab = "eventos" | "historico" | "mvp" | "tarifa";
+type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas";
 
 const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; tone: string }[] = [
   {
@@ -51,6 +52,13 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; t
     subtitle: "Clasificación",
     icon: <Trophy className="w-14 h-14" />,
     tone: "bg-accent text-accent-foreground",
+  },
+  {
+    id: "reservas",
+    label: "RESERVAS",
+    subtitle: "Local para eventos privados",
+    icon: <CalendarCheck className="w-14 h-14" />,
+    tone: "bg-destructive text-destructive-foreground",
   },
   {
     id: "tarifa",
@@ -122,6 +130,8 @@ function Index() {
           <MvpMonth />
         ) : tab === "tarifa" ? (
           <Tariff />
+        ) : tab === "reservas" ? (
+          <Reservations />
         ) : (
           <Launcher onOpen={setTab} />
         )}
