@@ -136,14 +136,17 @@ function Index() {
               B
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold truncate">
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+            <h1 className={`font-bold truncate ${event || current ? "text-lg" : "text-2xl"}`}>
               {event ? event.name : current ? current.label : "Barro CB"}
             </h1>
-            <p className="text-xs text-muted-foreground">
-              {event ? "Cuenta del evento" : current ? current.subtitle : "Gestión de consumiciones"}
-            </p>
+            {(event || current) && (
+              <p className="text-xs text-muted-foreground">
+                {event ? "Cuenta del evento" : current!.subtitle}
+              </p>
+            )}
           </div>
+
           <button
             className="btn-ghost !p-2 text-info hover:bg-white/40"
             onClick={() => window.location.reload()}
@@ -181,11 +184,8 @@ function Index() {
 function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
     <div className="py-6">
-      <div className="text-center mb-8">
-        <h2 className="font-display text-3xl font-bold">Barro CB</h2>
-        <p className="text-sm text-muted-foreground mt-1">Elige una sección</p>
-      </div>
       <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
+
         {APPS.map((a) => (
           <button
             key={a.id}
