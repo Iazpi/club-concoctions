@@ -175,7 +175,7 @@ function CalendarView({
                   isSel
                     ? "bg-primary text-primary-foreground"
                     : approved
-                      ? "bg-accent/70 text-accent-foreground"
+                      ? "bg-destructive/50 text-destructive-foreground"
                       : pending
                         ? "bg-info/40 text-foreground"
                         : "bg-white/40 text-foreground hover:bg-white/60"
@@ -185,7 +185,7 @@ function CalendarView({
                 {(approved || pending) && (
                   <span
                     className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
-                      approved ? "bg-accent-foreground" : "bg-info-foreground"
+                      approved ? "bg-destructive-foreground" : "bg-info-foreground"
                     }`}
                   />
                 )}
@@ -195,7 +195,7 @@ function CalendarView({
         </div>
 
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-muted-foreground">
-          <Legend className="bg-accent/70" label="Reservado" />
+          <Legend className="bg-destructive/50" label="Reservado" />
           <Legend className="bg-info/40" label="Pendiente" />
           <Legend className="bg-white/40" label="Libre" />
         </div>
@@ -210,14 +210,14 @@ function CalendarView({
             {dayRes.map((r) => (
               <li key={r.id} className="flex items-start gap-2 text-sm">
                 {r.status === "aprobada" ? (
-                  <CalendarCheck className="w-4 h-4 mt-0.5 text-accent-foreground" />
+                  <CalendarCheck className="w-4 h-4 mt-0.5 text-destructive-foreground" />
                 ) : (
                   <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
                 )}
                 <div>
                   <p className="font-medium">
                     {SLOT_LABEL[r.slot]} ·{" "}
-                    <span className={r.status === "aprobada" ? "text-accent-foreground" : "text-muted-foreground"}>
+                    <span className={r.status === "aprobada" ? "text-destructive-foreground" : "text-muted-foreground"}>
                       {r.status === "aprobada" ? "Aprobada" : "Pendiente de aprobación"}
                     </span>
                   </p>
@@ -462,7 +462,7 @@ function AdminPanel() {
               <li key={r.id} className="flex items-center gap-2 text-sm rounded-xl bg-white/40 p-2">
                 <span
                   className={`chip ${
-                    r.status === "aprobada" ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"
+                    r.status === "aprobada" ? "bg-destructive text-destructive-foreground" : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {r.status === "aprobada" ? "Aprobada" : "Rechazada"}
