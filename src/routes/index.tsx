@@ -32,14 +32,6 @@ export const Route = createFileRoute("/")({
 type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas";
 
 function ToastingGlasses({ className }: { className?: string }) {
-  const glassPaths = (
-    <>
-      <path d="M8 22h8" />
-      <path d="M7 10h10" />
-      <path d="M12 15v7" />
-      <path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z" />
-    </>
-  );
   return (
     <svg
       className={className}
@@ -50,12 +42,26 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <g transform="translate(5,20) rotate(15) translate(-12,-22)">
-        {glassPaths}
-      </g>
-      <g transform="translate(19,20) rotate(-15) translate(-12,-22)">
-        {glassPaths}
-      </g>
+      {/* Left glass */}
+      <path d="M4 21 L8 21" />
+      <path d="M6 21 L7 15" />
+      <path d="M7 15 C11 13, 12 9, 10 5" />
+      <path d="M10 5 L7 4" />
+      <path d="M7 4 C5 8, 5 12, 7 15" />
+
+      {/* Right glass */}
+      <path d="M16 21 L20 21" />
+      <path d="M18 21 L17 15" />
+      <path d="M17 15 C13 13, 12 9, 14 5" />
+      <path d="M14 5 L17 4" />
+      <path d="M17 4 C19 8, 19 12, 17 15" />
+
+      {/* Splash */}
+      <path d="M12 3 L10 1" />
+      <path d="M12 3 L14 1" />
+      <path d="M12 3 L12 1" />
+      <circle cx="10" cy="2" r="0.6" fill="currentColor" stroke="none" />
+      <circle cx="14" cy="2" r="0.6" fill="currentColor" stroke="none" />
     </svg>
   );
 }
