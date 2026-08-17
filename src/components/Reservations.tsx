@@ -175,7 +175,7 @@ function CalendarView({
                   isSel
                     ? "bg-primary text-primary-foreground"
                     : approved
-                      ? "bg-accent/70 text-accent-foreground"
+                      ? "bg-destructive/50 text-destructive-foreground"
                       : pending
                         ? "bg-info/40 text-foreground"
                         : "bg-white/40 text-foreground hover:bg-white/60"
@@ -185,7 +185,7 @@ function CalendarView({
                 {(approved || pending) && (
                   <span
                     className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
-                      approved ? "bg-accent-foreground" : "bg-info-foreground"
+                      approved ? "bg-destructive-foreground" : "bg-info-foreground"
                     }`}
                   />
                 )}
