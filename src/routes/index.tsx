@@ -38,32 +38,21 @@ function ToastingGlasses({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
+      aria-hidden="true"
     >
-      {/* Two rounded-bowl glasses clinking, stems splayed outwards. */}
-      <g transform="rotate(20 6.5 21)">
-        <path d="M3.3 4.6h6.4a3.2 3.2 0 0 1-6.4 0Z" />
-        <path d="M6.5 7.8V21" />
-        <path d="M4 21h5" />
+      <g transform="rotate(14 8.2 13)">
+        <path d="M4.5 4.8h7.4l-.5 3.1a3.3 3.3 0 0 1-6.4 0Z" />
+        <path d="M8.2 11.2v7" />
+        <path d="M5.6 18.2h5.2" />
       </g>
-      <g transform="rotate(-20 17.5 21)">
-        <path d="M14.3 4.6h6.4a3.2 3.2 0 0 1-6.4 0Z" />
-        <path d="M17.5 7.8V21" />
-        <path d="M15 21h5" />
+      <g transform="rotate(-14 15.8 13)">
+        <path d="M12.1 4.8h7.4l-.5 3.1a3.3 3.3 0 0 1-6.4 0Z" />
+        <path d="M15.8 11.2v7" />
+        <path d="M13.2 18.2h5.2" />
       </g>
-
-
-
-      {/* Fine splash at the point of the toast. */}
-      <g strokeWidth="0.85">
-        <path d="M12 4 10.8 2.6" />
-        <path d="M12 3.7 13.3 2.4" />
-        <path d="M12 3.5V1.9" />
-      </g>
-      <circle cx="10.4" cy="2.1" r="0.25" fill="currentColor" stroke="none" />
-      <circle cx="13.8" cy="1.9" r="0.25" fill="currentColor" stroke="none" />
     </svg>
   );
 }
