@@ -49,12 +49,37 @@ export interface Reservation {
   adminNote?: string;
 }
 
+export type ShoppingCategory =
+  | "Bebidas"
+  | "Cocina"
+  | "Limpieza"
+  | "Baño"
+  | "Desechables"
+  | "Otros";
+
+export interface ShoppingItem {
+  id: string;
+  name: string;
+  qty?: string; // texto libre: "2 packs", "1 caja"…
+  category: ShoppingCategory;
+  urgent?: boolean;
+  note?: string;
+  addedBy: string;
+  createdAt: number;
+  bought: boolean;
+  boughtBy?: string;
+  boughtAt?: number;
+  cost?: number;
+}
+
 export interface State {
   events: Event[];
   activeEventId: string | null;
   products?: Product[];
   reservations?: Reservation[];
+  shopping?: ShoppingItem[];
 }
+
 
 
 const ROW_ID = "main";
@@ -443,4 +468,53 @@ export function setReservationStatus(id: string, status: ReservationStatus) {
 export function deleteReservation(id: string) {
   state = { ...state, reservations: (state.reservations ?? []).filter((r) => r.id !== id) };
   emit();
+}
+
+// ---- Lista de la compra ----
+export const SHOPPING_CATEGORIES: ShoppingCategory[] = [
+  "Bebidas",
+  "Cocina",
+  "Limpieza",
+  "Baño",
+  "Desechables",
+  "Otros",
+];
+
+const EMPTY_SHOPPING: ShoppingItem[] = [];
+
+export function useShopping(): ShoppingItem[] {
+  return useStore((s) => s.shopping ?? EMPTY_SHOPPING);
+}
+
+function setShopping(list: ShoppingItem[]) {
+  state = { ...state, shopping: list };
+  emit();
+}
+
+export function addShoppingItem(
+  item: Omit<ShoppingItem, "id" | "createdAt" | "bought">,
+) {
+  const it: ShoppingItem = { ...item, id: uid(), createdAt: Date.now(), bought: false };
+  setShopping([...(state.shopping ?? []), it]);
+  return it.id;
+}
+
+export function updateShoppingItem(id: string, patch: Partial<ShoppingItem>) {
+  setShopping((state.shopping ?? []).map((i) => (i.id === id ? { ...i, ...patch } : i)));
+}
+
+export function markShoppingBought(id: string, boughtBy: string, cost?: number) {
+  updateShoppingItem(id, { bought: true, boughtBy, boughtAt: Date.now(), cost });
+}
+
+export function markShoppingPending(id: string) {
+  updateShoppingItem(id, { bought: false, boughtBy: undefined, boughtAt: undefined, cost: undefined });
+}
+
+export function deleteShoppingItem(id: string) {
+  setShopping((state.shopping ?? []).filter((i) => i.id !== id));
+}
+
+export function clearBoughtShopping() {
+  setShopping((state.shopping ?? []).filter((i) => !i.bought));
 }
