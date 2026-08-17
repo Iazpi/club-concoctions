@@ -462,7 +462,7 @@ function AdminPanel() {
               <li key={r.id} className="flex items-center gap-2 text-sm rounded-xl bg-white/40 p-2">
                 <span
                   className={`chip ${
-                    r.status === "aprobada" ? "bg-accent text-accent-foreground" : "bg-muted text-muted-foreground"
+                    r.status === "aprobada" ? "bg-destructive text-destructive-foreground" : "bg-muted text-muted-foreground"
                   }`}
                 >
                   {r.status === "aprobada" ? "Aprobada" : "Rechazada"}
