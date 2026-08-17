@@ -33,11 +33,29 @@ export interface Event {
   applyServiceFee?: boolean;
 }
 
+export type Slot = "manana" | "tarde" | "noche" | "completo";
+export type ReservationStatus = "pendiente" | "aprobada" | "rechazada";
+
+export interface Reservation {
+  id: string;
+  date: string; // yyyy-mm-dd
+  slot: Slot;
+  name: string;
+  surname: string;
+  reason: string;
+  status: ReservationStatus;
+  createdAt: number;
+  resolvedAt?: number;
+  adminNote?: string;
+}
+
 export interface State {
   events: Event[];
   activeEventId: string | null;
   products?: Product[];
+  reservations?: Reservation[];
 }
+
 
 const ROW_ID = "main";
 const LOCAL_KEY = "barro-app-v1";
