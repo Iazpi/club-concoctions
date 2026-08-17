@@ -137,19 +137,19 @@ function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
         <h2 className="font-display text-3xl font-bold">Barro CB</h2>
         <p className="text-sm text-muted-foreground mt-1">Elige una sección</p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 max-w-lg mx-auto">
+      <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
         {APPS.map((a) => (
           <button
             key={a.id}
             onClick={() => onOpen(a.id)}
-            className="group flex flex-col items-center gap-2 focus:outline-none"
+            className="group flex flex-col items-center gap-3 focus:outline-none"
           >
             <span
-              className={`w-20 h-20 rounded-2xl grid place-items-center shadow-sm transition-transform group-hover:scale-105 group-active:scale-95 ${a.tone}`}
+              className={`w-28 h-28 sm:w-32 sm:h-32 rounded-3xl grid place-items-center shadow-md transition-transform group-hover:scale-105 group-active:scale-95 ${a.tone}`}
             >
               {a.icon}
             </span>
-            <span className="text-xs font-semibold tracking-wide text-center">{a.label}</span>
+            <span className="text-sm sm:text-base font-bold tracking-wide text-center drop-shadow-sm">{a.label}</span>
           </button>
         ))}
       </div>
