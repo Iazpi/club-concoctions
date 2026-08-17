@@ -395,3 +395,50 @@ export function deleteProduct(id: string) {
 export function resetProducts() {
   setProducts(PRODUCTS);
 }
+
+// ---- Reservas ----
+export function useReservations(): Reservation[] {
+  return useStore((s) => s.reservations ?? []);
+}
+
+export function getReservations(): Reservation[] {
+  return state.reservations ?? [];
+}
+
+export const SLOT_LABEL: Record<Slot, string> = {
+  manana: "Mañana (8:00 - 13:00)",
+  tarde: "Tarde (13:00 - 18:00)",
+  noche: "Noche (18:00 - 00:00)",
+  completo: "Día completo (8:00 - 00:00)",
+};
+
+export function slotsOverlap(a: Slot, b: Slot) {
+  return a === "completo" || b === "completo" || a === b;
+}
+
+export function addReservation(r: Omit<Reservation, "id" | "status" | "createdAt">) {
+  const res: Reservation = {
+    ...r,
+    id: uid(),
+    status: "pendiente",
+    createdAt: Date.now(),
+  };
+  state = { ...state, reservations: [...(state.reservations ?? []), res] };
+  emit();
+  return res.id;
+}
+
+export function setReservationStatus(id: string, status: ReservationStatus) {
+  state = {
+    ...state,
+    reservations: (state.reservations ?? []).map((r) =>
+      r.id === id ? { ...r, status, resolvedAt: Date.now() } : r,
+    ),
+  };
+  emit();
+}
+
+export function deleteReservation(id: string) {
+  state = { ...state, reservations: (state.reservations ?? []).filter((r) => r.id !== id) };
+  emit();
+}
