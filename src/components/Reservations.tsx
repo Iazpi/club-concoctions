@@ -195,7 +195,7 @@ function CalendarView({
         </div>
 
         <div className="flex flex-wrap gap-3 mt-3 text-xs text-muted-foreground">
-          <Legend className="bg-accent/70" label="Reservado" />
+          <Legend className="bg-destructive/50" label="Reservado" />
           <Legend className="bg-info/40" label="Pendiente" />
           <Legend className="bg-white/40" label="Libre" />
         </div>
