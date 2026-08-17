@@ -42,19 +42,18 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {/* Two separated glasses using the original Lucide wine-glass shape. */}
-      <g transform="rotate(10 5.5 21)">
-        <path d="M2.5 5h6l-.6 6.3a3 3 0 0 1-4.8 0L2.5 5Z" />
-        <path d="M3.2 10.5h4.6" />
-        <path d="M5.5 14v7" />
+      {/* Two separated rounded-bowl glasses. */}
+      <g transform="rotate(12 5.5 21)">
+        <path d="M2.3 4.5h6.4a3.2 3.2 0 0 1-6.4 0Z" />
+        <path d="M5.5 7.7V21" />
         <path d="M3 21h5" />
       </g>
-      <g transform="rotate(-10 18.5 21)">
-        <path d="M15.5 5h6l-.6 6.3a3 3 0 0 1-4.8 0L15.5 5Z" />
-        <path d="M16.2 10.5h4.6" />
-        <path d="M18.5 14v7" />
+      <g transform="rotate(-12 18.5 21)">
+        <path d="M15.3 4.5h6.4a3.2 3.2 0 0 1-6.4 0Z" />
+        <path d="M18.5 7.7V21" />
         <path d="M16 21h5" />
       </g>
+
 
       {/* Fine splash at the point of the toast. */}
       <g strokeWidth="0.85">
