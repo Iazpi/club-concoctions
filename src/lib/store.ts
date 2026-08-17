@@ -195,9 +195,26 @@ function updateEvent(id: string, fn: (e: Event) => Event) {
 }
 
 export function addAttendee(eventId: string, name: string, socio: boolean) {
+  const attendeeId = uid();
+  const product = getProduct("comensal");
+  const applyFee = getState().events.find((e) => e.id === eventId)?.applyServiceFee;
   updateEvent(eventId, (e) => ({
     ...e,
-    attendees: [...e.attendees, { id: uid(), name, socio }],
+    attendees: [...e.attendees, { id: attendeeId, name, socio }],
+    consumptions:
+      applyFee && product
+        ? [
+            ...e.consumptions,
+            {
+              id: uid(),
+              attendeeId,
+              productId: product.id,
+              unitPrice: price(product, socio),
+              qty: 1,
+              ts: Date.now(),
+            },
+          ]
+        : e.consumptions,
   }));
 }
 
