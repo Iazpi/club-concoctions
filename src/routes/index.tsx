@@ -42,17 +42,18 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {/* Two separated rounded-bowl glasses. */}
-      <g transform="rotate(12 5.5 21)">
-        <path d="M2.3 4.5h6.4a3.2 3.2 0 0 1-6.4 0Z" />
-        <path d="M5.5 7.7V21" />
-        <path d="M3 21h5" />
+      {/* Two rounded-bowl glasses clinking, stems splayed outwards. */}
+      <g transform="rotate(20 6.5 21)">
+        <path d="M3.3 4.6h6.4a3.2 3.2 0 0 1-6.4 0Z" />
+        <path d="M6.5 7.8V21" />
+        <path d="M4 21h5" />
       </g>
-      <g transform="rotate(-12 18.5 21)">
-        <path d="M15.3 4.5h6.4a3.2 3.2 0 0 1-6.4 0Z" />
-        <path d="M18.5 7.7V21" />
-        <path d="M16 21h5" />
+      <g transform="rotate(-20 17.5 21)">
+        <path d="M14.3 4.6h6.4a3.2 3.2 0 0 1-6.4 0Z" />
+        <path d="M17.5 7.8V21" />
+        <path d="M15 21h5" />
       </g>
+
 
 
       {/* Fine splash at the point of the toast. */}
