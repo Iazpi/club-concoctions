@@ -49,12 +49,37 @@ export interface Reservation {
   adminNote?: string;
 }
 
+export type ShoppingCategory =
+  | "Bebidas"
+  | "Cocina"
+  | "Limpieza"
+  | "Baño"
+  | "Desechables"
+  | "Otros";
+
+export interface ShoppingItem {
+  id: string;
+  name: string;
+  qty?: string; // texto libre: "2 packs", "1 caja"…
+  category: ShoppingCategory;
+  urgent?: boolean;
+  note?: string;
+  addedBy: string;
+  createdAt: number;
+  bought: boolean;
+  boughtBy?: string;
+  boughtAt?: number;
+  cost?: number;
+}
+
 export interface State {
   events: Event[];
   activeEventId: string | null;
   products?: Product[];
   reservations?: Reservation[];
+  shopping?: ShoppingItem[];
 }
+
 
 
 const ROW_ID = "main";
