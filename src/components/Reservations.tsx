@@ -141,25 +141,25 @@ function CalendarView({
 
   return (
     <div className="space-y-4">
-      <Card className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <button className="btn-ghost !p-2" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
-            <ChevronLeft className="w-5 h-5" />
+      <Card className="p-3">
+        <div className="flex items-center justify-between mb-2">
+          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <h3 className="font-display text-lg font-bold">
+          <h3 className="font-display text-base font-bold">
             {MONTHS[month]} {year}
           </h3>
-          <button className="btn-ghost !p-2" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
-            <ChevronRight className="w-5 h-5" />
+          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-muted-foreground mb-1">
+        <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-muted-foreground mb-1">
           {DOW.map((d, i) => (
             <div key={i}>{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-0.5">
           {cells.map((d, i) => {
             if (!d) return <div key={i} />;
             const list = dayInfo.get(d) ?? [];
@@ -171,7 +171,7 @@ function CalendarView({
               <button
                 key={i}
                 onClick={() => onSelect(d)}
-                className={`aspect-square rounded-xl text-sm font-semibold grid place-items-center relative transition-colors ${
+                className={`h-9 rounded-lg text-xs font-semibold grid place-items-center relative transition-colors ${
                   isSel
                     ? "bg-primary text-primary-foreground"
                     : approved
@@ -184,7 +184,7 @@ function CalendarView({
                 {Number(d.slice(-2))}
                 {(approved || pending) && (
                   <span
-                    className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
+                    className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
                       approved ? "bg-destructive-foreground" : "bg-info-foreground"
                     }`}
                   />
@@ -194,19 +194,19 @@ function CalendarView({
           })}
         </div>
 
-        <div className="flex flex-wrap gap-3 mt-3 text-xs text-muted-foreground">
+        <div className="flex flex-wrap gap-2 mt-2 text-[10px] text-muted-foreground">
           <Legend className="bg-destructive/50" label="Reservado" />
           <Legend className="bg-info/40" label="Pendiente" />
           <Legend className="bg-white/40" label="Libre" />
         </div>
       </Card>
 
-      <Card className="p-4">
-        <h3 className="font-semibold mb-2">{prettyDate(selected)}</h3>
+      <Card className="p-3">
+        <h3 className="font-semibold text-sm mb-1.5">{prettyDate(selected)}</h3>
         {dayRes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Día libre, sin reservas.</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-1.5">
             {dayRes.map((r) => (
               <li key={r.id} className="flex items-start gap-2 text-sm">
                 {r.status === "aprobada" ? (
@@ -215,13 +215,13 @@ function CalendarView({
                   <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
                 )}
                 <div>
-                  <p className="font-medium">
+                  <p className="font-medium text-sm">
                     {SLOT_LABEL[r.slot]} ·{" "}
                     <span className={r.status === "aprobada" ? "text-destructive-foreground" : "text-muted-foreground"}>
                       {r.status === "aprobada" ? "Aprobada" : "Pendiente de aprobación"}
                     </span>
                   </p>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {r.name} {r.surname} — {r.reason}
                   </p>
                 </div>
@@ -229,7 +229,7 @@ function CalendarView({
             ))}
           </ul>
         )}
-        <button className="btn-primary mt-4 w-full justify-center" onClick={() => onRequest(selected)}>
+        <button className="btn-primary mt-3 w-full justify-center text-sm py-2" onClick={() => onRequest(selected)}>
           Solicitar este día
         </button>
       </Card>
