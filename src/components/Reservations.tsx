@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 // PIN de administrador (cámbialo cuando quieras en este archivo)
-const ADMIN_PIN = "1969";
+const ADMIN_PIN = "1898";
 
 const SLOTS: Slot[] = ["manana", "tarde", "noche", "completo"];
 const DOW = ["L", "M", "X", "J", "V", "S", "D"];

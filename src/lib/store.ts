@@ -397,8 +397,10 @@ export function resetProducts() {
 }
 
 // ---- Reservas ----
+const EMPTY_RESERVATIONS: Reservation[] = [];
+
 export function useReservations(): Reservation[] {
-  return useStore((s) => s.reservations ?? []);
+  return useStore((s) => s.reservations ?? EMPTY_RESERVATIONS);
 }
 
 export function getReservations(): Reservation[] {
