@@ -7,7 +7,7 @@ import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
-import { ArrowLeft, CalendarDays, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,7 +36,7 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; t
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <CalendarDays className="w-14 h-14" />,
+    icon: <UtensilsCrossed className="w-14 h-14" />,
     tone: "bg-primary text-primary-foreground",
   },
   {
