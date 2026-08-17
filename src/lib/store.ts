@@ -332,6 +332,10 @@ export function renameEvent(eventId: string, name: string, date: string) {
   updateEvent(eventId, (e) => ({ ...e, name, date }));
 }
 
+export function setApplyServiceFee(eventId: string, v: boolean) {
+  updateEvent(eventId, (e) => ({ ...e, applyServiceFee: v }));
+}
+
 // ---- Productos (tarifa editable, compartida en la nube) ----
 export function useProducts(): Product[] {
   return useStore((s) => s.products ?? PRODUCTS);
