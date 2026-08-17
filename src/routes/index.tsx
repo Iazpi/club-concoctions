@@ -50,10 +50,10 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <g transform="translate(6,20) rotate(15) translate(-12,-22)">
+      <g transform="translate(5,20) rotate(15) translate(-12,-22)">
         {glassPaths}
       </g>
-      <g transform="translate(18,20) rotate(-15) translate(-12,-22)">
+      <g transform="translate(19,20) rotate(-15) translate(-12,-22)">
         {glassPaths}
       </g>
     </svg>
