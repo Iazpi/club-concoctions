@@ -28,6 +28,9 @@
   --color-socio-foreground: var(--socio-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-shopping: var(--shopping);
+  --color-shopping-foreground: var(--shopping-foreground);
+
   --font-display: "Fraunces", Georgia, serif;
 }
 
@@ -51,6 +54,9 @@
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.985 0.008 85);
   --info: oklch(0.55 0.18 245); /* azul */
+  --shopping: oklch(0.48 0.14 300); /* morado */
+  --shopping-foreground: oklch(0.985 0.008 85);
+
   --info-foreground: oklch(0.985 0.008 85);
 }
 

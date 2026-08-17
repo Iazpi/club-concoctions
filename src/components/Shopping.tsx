@@ -170,10 +170,18 @@ function AddForm() {
           <input type="checkbox" checked={urgent} onChange={(e) => setUrgent(e.target.checked)} />
           Urgente
         </label>
-        <button className="btn-primary flex items-center gap-1" onClick={submit}>
+        <button
+          type="button"
+          className="btn-primary flex items-center gap-1 disabled:opacity-50"
+          disabled={!name.trim()}
+          onClick={submit}
+        >
           <Plus className="w-4 h-4" /> Añadir
         </button>
       </div>
+      {!name.trim() && (
+        <p className="text-xs text-muted-foreground">Escribe primero qué falta para poder añadirlo.</p>
+      )}
     </Card>
   );
 }
