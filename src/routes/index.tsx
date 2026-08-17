@@ -36,7 +36,7 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; t
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <CalendarDays className="w-14 h-14" />,
+    icon: <UtensilsCrossed className="w-14 h-14" />,
     tone: "bg-primary text-primary-foreground",
   },
   {
