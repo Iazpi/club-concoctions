@@ -60,48 +60,42 @@ function ToastingGlasses({ className }: { className?: string }) {
   );
 }
 
-const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; tone: string }[] = [
+const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[] = [
   {
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <ToastingGlasses className="w-14 h-14" />,
-    tone: "bg-primary text-primary-foreground",
+    icon: <ToastingGlasses className="w-12 h-12" />,
   },
   {
     id: "historico",
     label: "HISTÓRICO",
     subtitle: "Consumo mensual",
-    icon: <HistoryIcon className="w-14 h-14" />,
-    tone: "bg-socio text-socio-foreground",
+    icon: <HistoryIcon className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "mvp",
     label: "MVP DEL MES",
     subtitle: "Clasificación",
-    icon: <Trophy className="w-14 h-14" />,
-    tone: "bg-accent text-accent-foreground",
+    icon: <Trophy className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "reservas",
     label: "RESERVAS",
     subtitle: "Local para eventos privados",
-    icon: <CalendarCheck className="w-14 h-14" />,
-    tone: "bg-destructive text-destructive-foreground",
+    icon: <CalendarCheck className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "compra",
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
-    icon: <ShoppingCart className="w-14 h-14" />,
-    tone: "bg-shopping text-shopping-foreground",
+    icon: <ShoppingCart className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "tarifa",
     label: "TARIFA",
     subtitle: "Lista de precios",
-    icon: <ListOrdered className="w-14 h-14" />,
-    tone: "bg-info text-info-foreground",
+    icon: <ListOrdered className="w-12 h-12" strokeWidth={1.5} />,
   },
 ];
 
