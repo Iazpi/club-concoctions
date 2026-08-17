@@ -39,7 +39,7 @@ function ToastingGlasses({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -60,48 +60,42 @@ function ToastingGlasses({ className }: { className?: string }) {
   );
 }
 
-const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; tone: string }[] = [
+const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[] = [
   {
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <ToastingGlasses className="w-14 h-14" />,
-    tone: "bg-primary text-primary-foreground",
+    icon: <ToastingGlasses className="w-12 h-12" />,
   },
   {
     id: "historico",
     label: "HISTÓRICO",
     subtitle: "Consumo mensual",
-    icon: <HistoryIcon className="w-14 h-14" />,
-    tone: "bg-socio text-socio-foreground",
+    icon: <HistoryIcon className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "mvp",
     label: "MVP DEL MES",
     subtitle: "Clasificación",
-    icon: <Trophy className="w-14 h-14" />,
-    tone: "bg-accent text-accent-foreground",
+    icon: <Trophy className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "reservas",
     label: "RESERVAS",
     subtitle: "Local para eventos privados",
-    icon: <CalendarCheck className="w-14 h-14" />,
-    tone: "bg-destructive text-destructive-foreground",
+    icon: <CalendarCheck className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "compra",
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
-    icon: <ShoppingCart className="w-14 h-14" />,
-    tone: "bg-shopping text-shopping-foreground",
+    icon: <ShoppingCart className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "tarifa",
     label: "TARIFA",
     subtitle: "Lista de precios",
-    icon: <ListOrdered className="w-14 h-14" />,
-    tone: "bg-info text-info-foreground",
+    icon: <ListOrdered className="w-12 h-12" strokeWidth={1.5} />,
   },
 ];
 
@@ -183,21 +177,20 @@ function Index() {
 
 function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
-    <div className="py-6">
-      <div className="grid grid-cols-2 gap-6 max-w-md mx-auto">
-
+    <div className="py-8">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-8 max-w-md mx-auto">
         {APPS.map((a) => (
           <button
             key={a.id}
             onClick={() => onOpen(a.id)}
-            className="group flex flex-col items-center gap-3 focus:outline-none"
+            className="group flex flex-col items-center gap-2 focus:outline-none text-primary"
           >
-            <span
-              className={`w-28 h-28 sm:w-32 sm:h-32 rounded-3xl grid place-items-center shadow-md transition-transform group-hover:scale-105 group-active:scale-95 ${a.tone}`}
-            >
+            <span className="transition-transform group-hover:scale-110 group-active:scale-95">
               {a.icon}
             </span>
-            <span className="text-sm sm:text-base font-bold tracking-wide text-center drop-shadow-sm">{a.label}</span>
+            <span className="text-xs sm:text-sm font-semibold tracking-wide text-center text-foreground">
+              {a.label}
+            </span>
           </button>
         ))}
       </div>
