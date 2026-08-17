@@ -28,6 +28,9 @@
   --color-socio-foreground: var(--socio-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-shopping: var(--shopping);
+  --color-shopping-foreground: var(--shopping-foreground);
+
   --font-display: "Fraunces", Georgia, serif;
 }
 
