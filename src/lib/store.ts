@@ -30,6 +30,7 @@ export interface Event {
   consumptions: Consumption[];
   splitCleaning: boolean;
   closed: boolean;
+  applyServiceFee?: boolean;
 }
 
 export interface State {
