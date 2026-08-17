@@ -7,7 +7,7 @@ import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
-import { ArrowLeft, Wine, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
+import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,12 +31,37 @@ export const Route = createFileRoute("/")({
 
 type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas";
 
+function ToastingGlasses({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <g transform="translate(7,12) rotate(30)">
+        <path d="M -3 -5 L -3 0 C -3 3, 3 3, 3 0 L 3 -5" />
+        <line x1="0" y1="3" x2="0" y2="7" />
+        <line x1="-2" y1="7" x2="2" y2="7" />
+      </g>
+      <g transform="translate(17,12) rotate(-30)">
+        <path d="M -3 -5 L -3 0 C -3 3, 3 3, 3 0 L 3 -5" />
+        <line x1="0" y1="3" x2="0" y2="7" />
+        <line x1="-2" y1="7" x2="2" y2="7" />
+      </g>
+    </svg>
+  );
+}
+
 const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; tone: string }[] = [
   {
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <Wine className="w-14 h-14" />,
+    icon: <ToastingGlasses className="w-14 h-14" />,
     tone: "bg-primary text-primary-foreground",
   },
   {
