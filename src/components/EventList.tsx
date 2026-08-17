@@ -106,6 +106,42 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
           )}
         </div>
       )}
+
+      {pendingCreate && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4">
+          <Card className="w-full sm:max-w-md flex flex-col rounded-b-none sm:rounded-xl">
+            <div className="p-4 border-b border-border">
+              <h3 className="text-lg font-semibold">Servicio por comensal</h3>
+              <p className="text-sm text-muted-foreground">
+                ¿Quieres aplicar este coste a todos los asistentes del evento?
+              </p>
+            </div>
+            <div className="p-4 space-y-3">
+              <p className="text-sm">
+                Si lo activas, se añadirá automáticamente{" "}
+                <span className="font-semibold text-primary">
+                  {serviceProduct ? fmt(price(serviceProduct, true)) : "1,00 €"}
+                </span>{" "}
+                por asistente al registrarlos en el evento.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  className="btn-primary flex-1"
+                  onClick={() => confirmCreate(true)}
+                >
+                  Sí, aplicar
+                </button>
+                <button
+                  className="btn-secondary flex-1"
+                  onClick={() => confirmCreate(false)}
+                >
+                  No, omitir
+                </button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
