@@ -30,25 +30,61 @@ export const Route = createFileRoute("/")({
 
 type Tab = "eventos" | "historico" | "mvp" | "tarifa";
 
+const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; tone: string }[] = [
+  {
+    id: "eventos",
+    label: "EVENTOS",
+    subtitle: "Comidas y actos",
+    icon: <CalendarDays className="w-8 h-8" />,
+    tone: "bg-primary text-primary-foreground",
+  },
+  {
+    id: "historico",
+    label: "HISTÓRICO",
+    subtitle: "Consumo mensual",
+    icon: <HistoryIcon className="w-8 h-8" />,
+    tone: "bg-socio text-socio-foreground",
+  },
+  {
+    id: "mvp",
+    label: "MVP DEL MES",
+    subtitle: "Clasificación",
+    icon: <Trophy className="w-8 h-8" />,
+    tone: "bg-accent text-accent-foreground",
+  },
+  {
+    id: "tarifa",
+    label: "TARIFA",
+    subtitle: "Lista de precios",
+    icon: <ListOrdered className="w-8 h-8" />,
+    tone: "bg-info text-info-foreground",
+  },
+];
+
 function Index() {
-  const [tab, setTab] = useState<Tab>("eventos");
+  const [tab, setTab] = useState<Tab | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const event = useStore((s) =>
     openId ? s.events.find((e) => e.id === openId) ?? null : null,
   );
 
+  const current = APPS.find((a) => a.id === tab);
+
+  const goBack = () => {
+    if (event) {
+      setOpenId(null);
+      setActiveEvent(null);
+    } else {
+      setTab(null);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-border bg-card/95 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
-          {event ? (
-            <button
-              className="btn-ghost !p-2"
-              onClick={() => {
-                setOpenId(null);
-                setActiveEvent(null);
-              }}
-            >
+          {event || tab ? (
+            <button className="btn-ghost !p-2" onClick={goBack} aria-label="Volver">
               <ArrowLeft className="w-5 h-5" />
             </button>
           ) : (
@@ -58,10 +94,10 @@ function Index() {
           )}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold truncate">
-              {event ? event.name : "Barro CB"}
+              {event ? event.name : current ? current.label : "Barro CB"}
             </h1>
             <p className="text-xs text-muted-foreground">
-              {event ? "Cuenta del evento" : "Gestión de consumiciones"}
+              {event ? "Cuenta del evento" : current ? current.subtitle : "Gestión de consumiciones"}
             </p>
           </div>
           <button
@@ -72,24 +108,7 @@ function Index() {
           >
             <RefreshCw className="w-5 h-5" />
           </button>
-
         </div>
-        {!event && (
-          <nav className="max-w-3xl mx-auto px-2 flex gap-1">
-            <TabBtn active={tab === "eventos"} onClick={() => setTab("eventos")} icon={<CalendarDays className="w-4 h-4" />}>
-              Eventos
-            </TabBtn>
-            <TabBtn active={tab === "historico"} onClick={() => setTab("historico")} icon={<HistoryIcon className="w-4 h-4" />}>
-              Histórico
-            </TabBtn>
-            <TabBtn active={tab === "mvp"} onClick={() => setTab("mvp")} icon={<Trophy className="w-4 h-4" />}>
-              MVP del mes
-            </TabBtn>
-            <TabBtn active={tab === "tarifa"} onClick={() => setTab("tarifa")} icon={<ListOrdered className="w-4 h-4" />}>
-              Tarifa
-            </TabBtn>
-          </nav>
-        )}
       </header>
 
       <main className="max-w-3xl mx-auto px-4 py-4 pb-16">
@@ -101,36 +120,40 @@ function Index() {
           <History />
         ) : tab === "mvp" ? (
           <MvpMonth />
-        ) : (
+        ) : tab === "tarifa" ? (
           <Tariff />
+        ) : (
+          <Launcher onOpen={setTab} />
         )}
       </main>
     </div>
   );
 }
 
-function TabBtn({
-  active,
-  onClick,
-  icon,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
+function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
-    <button
-      onClick={onClick}
-      className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-        active
-          ? "border-primary text-primary"
-          : "border-transparent text-muted-foreground hover:text-foreground"
-      }`}
-    >
-      {icon}
-      {children}
-    </button>
+    <div className="py-6">
+      <div className="text-center mb-8">
+        <h2 className="font-display text-3xl font-bold">Barro CB</h2>
+        <p className="text-sm text-muted-foreground mt-1">Elige una sección</p>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 max-w-lg mx-auto">
+        {APPS.map((a) => (
+          <button
+            key={a.id}
+            onClick={() => onOpen(a.id)}
+            className="group flex flex-col items-center gap-2 focus:outline-none"
+          >
+            <span
+              className={`w-20 h-20 rounded-2xl grid place-items-center shadow-sm transition-transform group-hover:scale-105 group-active:scale-95 ${a.tone}`}
+            >
+              {a.icon}
+            </span>
+            <span className="text-xs font-semibold tracking-wide text-center">{a.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
+
