@@ -14,15 +14,24 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
   const [editName, setEditName] = useState("");
   const [editDate, setEditDate] = useState("");
   const [subTab, setSubTab] = useState<SubTab>("open");
+  const [pendingCreate, setPendingCreate] = useState<{ name: string; date: string } | null>(null);
 
   const openEvents = events.filter((e) => !e.closed);
   const closedEvents = events.filter((e) => e.closed);
   const shownEvents = subTab === "open" ? openEvents : closedEvents;
 
+  const serviceProduct = getProduct("comensal");
+
   const create = () => {
     const n = name.trim();
     if (!n) return;
-    const id = createEvent(n, date);
+    setPendingCreate({ name: n, date });
+  };
+
+  const confirmCreate = (applyServiceFee: boolean) => {
+    if (!pendingCreate) return;
+    const id = createEvent(pendingCreate.name, pendingCreate.date, applyServiceFee);
+    setPendingCreate(null);
     setName("");
     setSubTab("open");
     onOpen(id);
