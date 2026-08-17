@@ -32,6 +32,14 @@ export const Route = createFileRoute("/")({
 type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas";
 
 function ToastingGlasses({ className }: { className?: string }) {
+  const glassPaths = (
+    <>
+      <path d="M8 22h8" />
+      <path d="M7 10h10" />
+      <path d="M12 15v7" />
+      <path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z" />
+    </>
+  );
   return (
     <svg
       className={className}
@@ -42,15 +50,11 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <g transform="translate(7,12) rotate(30)">
-        <path d="M -3 -5 L -3 0 C -3 3, 3 3, 3 0 L 3 -5" />
-        <line x1="0" y1="3" x2="0" y2="7" />
-        <line x1="-2" y1="7" x2="2" y2="7" />
+      <g transform="translate(7,20) rotate(30) translate(-12,-22)">
+        {glassPaths}
       </g>
-      <g transform="translate(17,12) rotate(-30)">
-        <path d="M -3 -5 L -3 0 C -3 3, 3 3, 3 0 L 3 -5" />
-        <line x1="0" y1="3" x2="0" y2="7" />
-        <line x1="-2" y1="7" x2="2" y2="7" />
+      <g transform="translate(17,20) rotate(-30) translate(-12,-22)">
+        {glassPaths}
       </g>
     </svg>
   );
