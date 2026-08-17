@@ -159,7 +159,7 @@ if (typeof window !== "undefined") {
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 // ---- Actions ----
-export function createEvent(name: string, date: string) {
+export function createEvent(name: string, date: string, applyServiceFee = false) {
   const ev: Event = {
     id: uid(),
     name,
@@ -168,6 +168,7 @@ export function createEvent(name: string, date: string) {
     consumptions: [],
     splitCleaning: false,
     closed: false,
+    applyServiceFee,
   };
   state = { ...state, events: [ev, ...state.events], activeEventId: ev.id };
   emit();
