@@ -141,25 +141,25 @@ function CalendarView({
 
   return (
     <div className="space-y-4">
-      <Card className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <button className="btn-ghost !p-2" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
-            <ChevronLeft className="w-5 h-5" />
+      <Card className="p-3">
+        <div className="flex items-center justify-between mb-2">
+          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
+            <ChevronLeft className="w-4 h-4" />
           </button>
-          <h3 className="font-display text-lg font-bold">
+          <h3 className="font-display text-base font-bold">
             {MONTHS[month]} {year}
           </h3>
-          <button className="btn-ghost !p-2" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
-            <ChevronRight className="w-5 h-5" />
+          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-muted-foreground mb-1">
+        <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-muted-foreground mb-1">
           {DOW.map((d, i) => (
             <div key={i}>{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-0.5">
           {cells.map((d, i) => {
             if (!d) return <div key={i} />;
             const list = dayInfo.get(d) ?? [];
@@ -171,7 +171,7 @@ function CalendarView({
               <button
                 key={i}
                 onClick={() => onSelect(d)}
-                className={`aspect-square rounded-xl text-sm font-semibold grid place-items-center relative transition-colors ${
+                className={`h-9 rounded-lg text-xs font-semibold grid place-items-center relative transition-colors ${
                   isSel
                     ? "bg-primary text-primary-foreground"
                     : approved
@@ -184,7 +184,7 @@ function CalendarView({
                 {Number(d.slice(-2))}
                 {(approved || pending) && (
                   <span
-                    className={`absolute bottom-1 w-1.5 h-1.5 rounded-full ${
+                    className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
                       approved ? "bg-destructive-foreground" : "bg-info-foreground"
                     }`}
                   />
@@ -194,7 +194,7 @@ function CalendarView({
           })}
         </div>
 
-        <div className="flex flex-wrap gap-3 mt-3 text-xs text-muted-foreground">
+        <div className="flex flex-wrap gap-2 mt-2 text-[10px] text-muted-foreground">
           <Legend className="bg-destructive/50" label="Reservado" />
           <Legend className="bg-info/40" label="Pendiente" />
           <Legend className="bg-white/40" label="Libre" />
