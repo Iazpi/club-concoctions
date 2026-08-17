@@ -94,7 +94,7 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string; t
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
     icon: <ShoppingCart className="w-14 h-14" />,
-    tone: "bg-socio text-socio-foreground",
+    tone: "bg-shopping text-shopping-foreground",
   },
   {
     id: "tarifa",
