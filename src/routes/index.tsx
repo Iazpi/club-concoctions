@@ -7,7 +7,7 @@ import { History } from "@/components/History";
 import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
-import { ArrowLeft, Wine, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
+import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
