@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useStore, createEvent, setActiveEvent, renameEvent, type Event } from "@/lib/store";
 import { Card, Input } from "@/components/ui";
-import { fmt } from "@/lib/catalog";
+import { fmt, getProduct, price } from "@/lib/catalog";
 import { Plus, ChevronRight, Pencil } from "lucide-react";
 
 type SubTab = "open" | "closed";
