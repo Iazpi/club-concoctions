@@ -201,12 +201,12 @@ function CalendarView({
         </div>
       </Card>
 
-      <Card className="p-4">
-        <h3 className="font-semibold mb-2">{prettyDate(selected)}</h3>
+      <Card className="p-3">
+        <h3 className="font-semibold text-sm mb-1.5">{prettyDate(selected)}</h3>
         {dayRes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Día libre, sin reservas.</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-1.5">
             {dayRes.map((r) => (
               <li key={r.id} className="flex items-start gap-2 text-sm">
                 {r.status === "aprobada" ? (
@@ -215,13 +215,13 @@ function CalendarView({
                   <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
                 )}
                 <div>
-                  <p className="font-medium">
+                  <p className="font-medium text-sm">
                     {SLOT_LABEL[r.slot]} ·{" "}
                     <span className={r.status === "aprobada" ? "text-destructive-foreground" : "text-muted-foreground"}>
                       {r.status === "aprobada" ? "Aprobada" : "Pendiente de aprobación"}
                     </span>
                   </p>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {r.name} {r.surname} — {r.reason}
                   </p>
                 </div>
@@ -229,7 +229,7 @@ function CalendarView({
             ))}
           </ul>
         )}
-        <button className="btn-primary mt-4 w-full justify-center" onClick={() => onRequest(selected)}>
+        <button className="btn-primary mt-3 w-full justify-center text-sm py-2" onClick={() => onRequest(selected)}>
           Solicitar este día
         </button>
       </Card>
