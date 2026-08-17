@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useStore, createEvent, setActiveEvent, renameEvent, type Event } from "@/lib/store";
 import { Card, Input } from "@/components/ui";
-import { fmt } from "@/lib/catalog";
+import { fmt, getProduct, price } from "@/lib/catalog";
 import { Plus, ChevronRight, Pencil } from "lucide-react";
 
 type SubTab = "open" | "closed";
@@ -14,15 +14,24 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
   const [editName, setEditName] = useState("");
   const [editDate, setEditDate] = useState("");
   const [subTab, setSubTab] = useState<SubTab>("open");
+  const [pendingCreate, setPendingCreate] = useState<{ name: string; date: string } | null>(null);
 
   const openEvents = events.filter((e) => !e.closed);
   const closedEvents = events.filter((e) => e.closed);
   const shownEvents = subTab === "open" ? openEvents : closedEvents;
 
+  const serviceProduct = getProduct("comensal");
+
   const create = () => {
     const n = name.trim();
     if (!n) return;
-    const id = createEvent(n, date);
+    setPendingCreate({ name: n, date });
+  };
+
+  const confirmCreate = (applyServiceFee: boolean) => {
+    if (!pendingCreate) return;
+    const id = createEvent(pendingCreate.name, pendingCreate.date, applyServiceFee);
+    setPendingCreate(null);
     setName("");
     setSubTab("open");
     onOpen(id);
@@ -95,6 +104,42 @@ export function EventList({ onOpen }: { onOpen: (id: string) => void }) {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {pendingCreate && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-0 sm:p-4">
+          <Card className="w-full sm:max-w-md flex flex-col rounded-b-none sm:rounded-xl">
+            <div className="p-4 border-b border-border">
+              <h3 className="text-lg font-semibold">Servicio por comensal</h3>
+              <p className="text-sm text-muted-foreground">
+                ¿Quieres aplicar este coste a todos los asistentes del evento?
+              </p>
+            </div>
+            <div className="p-4 space-y-3">
+              <p className="text-sm">
+                Si lo activas, se añadirá automáticamente{" "}
+                <span className="font-semibold text-primary">
+                  {serviceProduct ? fmt(price(serviceProduct, true)) : "1,00 €"}
+                </span>{" "}
+                por asistente al registrarlos en el evento.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <button
+                  className="btn-primary flex-1"
+                  onClick={() => confirmCreate(true)}
+                >
+                  Sí, aplicar
+                </button>
+                <button
+                  className="btn-secondary flex-1"
+                  onClick={() => confirmCreate(false)}
+                >
+                  No, omitir
+                </button>
+              </div>
+            </div>
+          </Card>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { PRODUCTS, setActiveProducts, type Category, type Product } from "@/lib/catalog";
+import { PRODUCTS, setActiveProducts, getProduct, price, type Category, type Product } from "@/lib/catalog";
 
 
 export interface Attendee {
@@ -30,6 +30,7 @@ export interface Event {
   consumptions: Consumption[];
   splitCleaning: boolean;
   closed: boolean;
+  applyServiceFee?: boolean;
 }
 
 export interface State {
@@ -158,7 +159,7 @@ if (typeof window !== "undefined") {
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 // ---- Actions ----
-export function createEvent(name: string, date: string) {
+export function createEvent(name: string, date: string, applyServiceFee = false) {
   const ev: Event = {
     id: uid(),
     name,
@@ -167,6 +168,7 @@ export function createEvent(name: string, date: string) {
     consumptions: [],
     splitCleaning: false,
     closed: false,
+    applyServiceFee,
   };
   state = { ...state, events: [ev, ...state.events], activeEventId: ev.id };
   emit();
@@ -193,9 +195,26 @@ function updateEvent(id: string, fn: (e: Event) => Event) {
 }
 
 export function addAttendee(eventId: string, name: string, socio: boolean) {
+  const attendeeId = uid();
+  const product = getProduct("comensal");
+  const applyFee = getState().events.find((e) => e.id === eventId)?.applyServiceFee;
   updateEvent(eventId, (e) => ({
     ...e,
-    attendees: [...e.attendees, { id: uid(), name, socio }],
+    attendees: [...e.attendees, { id: attendeeId, name, socio }],
+    consumptions:
+      applyFee && product
+        ? [
+            ...e.consumptions,
+            {
+              id: uid(),
+              attendeeId,
+              productId: product.id,
+              unitPrice: price(product, socio),
+              qty: 1,
+              ts: Date.now(),
+            },
+          ]
+        : e.consumptions,
   }));
 }
 
@@ -311,6 +330,10 @@ export function setEventClosed(eventId: string, v: boolean) {
 
 export function renameEvent(eventId: string, name: string, date: string) {
   updateEvent(eventId, (e) => ({ ...e, name, date }));
+}
+
+export function setApplyServiceFee(eventId: string, v: boolean) {
+  updateEvent(eventId, (e) => ({ ...e, applyServiceFee: v }));
 }
 
 // ---- Productos (tarifa editable, compartida en la nube) ----
