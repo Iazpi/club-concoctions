@@ -42,26 +42,28 @@ function ToastingGlasses({ className }: { className?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {/* Left glass */}
-      <path d="M4 21 L8 21" />
-      <path d="M6 21 L7 15" />
-      <path d="M7 15 C11 13, 12 9, 10 5" />
-      <path d="M10 5 L7 4" />
-      <path d="M7 4 C5 8, 5 12, 7 15" />
+      {/* Two separated glasses using the original Lucide wine-glass shape. */}
+      <g transform="rotate(10 5.5 21)">
+        <path d="M2.5 5h6l-.6 6.3a3 3 0 0 1-4.8 0L2.5 5Z" />
+        <path d="M3.2 10.5h4.6" />
+        <path d="M5.5 14v7" />
+        <path d="M3 21h5" />
+      </g>
+      <g transform="rotate(-10 18.5 21)">
+        <path d="M15.5 5h6l-.6 6.3a3 3 0 0 1-4.8 0L15.5 5Z" />
+        <path d="M16.2 10.5h4.6" />
+        <path d="M18.5 14v7" />
+        <path d="M16 21h5" />
+      </g>
 
-      {/* Right glass */}
-      <path d="M16 21 L20 21" />
-      <path d="M18 21 L17 15" />
-      <path d="M17 15 C13 13, 12 9, 14 5" />
-      <path d="M14 5 L17 4" />
-      <path d="M17 4 C19 8, 19 12, 17 15" />
-
-      {/* Splash */}
-      <path d="M12 3 L10 1" />
-      <path d="M12 3 L14 1" />
-      <path d="M12 3 L12 1" />
-      <circle cx="10" cy="2" r="0.6" fill="currentColor" stroke="none" />
-      <circle cx="14" cy="2" r="0.6" fill="currentColor" stroke="none" />
+      {/* Fine splash at the point of the toast. */}
+      <g strokeWidth="0.85">
+        <path d="M12 4 10.8 2.6" />
+        <path d="M12 3.7 13.3 2.4" />
+        <path d="M12 3.5V1.9" />
+      </g>
+      <circle cx="10.4" cy="2.1" r="0.25" fill="currentColor" stroke="none" />
+      <circle cx="13.8" cy="1.9" r="0.25" fill="currentColor" stroke="none" />
     </svg>
   );
 }
