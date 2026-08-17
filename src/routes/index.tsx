@@ -38,20 +38,22 @@ function ToastingGlasses({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <g transform="rotate(14 8.2 13)">
-        <path d="M4.5 4.8h7.4l-.5 3.1a3.3 3.3 0 0 1-6.4 0Z" />
-        <path d="M8.2 11.2v7" />
-        <path d="M5.6 18.2h5.2" />
+      <g transform="rotate(10 8.2 11.5)">
+        <path d="M4.4 3.8h7.2l-.6 4.1a3.1 3.1 0 0 1-3.1 2.7 3.1 3.1 0 0 1-3-2.7Z" />
+        <path d="M5 7.2c1.7-.1 3.8.8 5.8.1" />
+        <path d="M7.9 10.6v7.3" />
+        <path d="M5.3 17.9h5.2" />
       </g>
-      <g transform="rotate(-14 15.8 13)">
-        <path d="M12.1 4.8h7.4l-.5 3.1a3.3 3.3 0 0 1-6.4 0Z" />
-        <path d="M15.8 11.2v7" />
-        <path d="M13.2 18.2h5.2" />
+      <g transform="rotate(-10 15.8 11.5)">
+        <path d="M12.4 3.8h7.2l-.5 4.1a3.1 3.1 0 0 1-3.1 2.7 3.1 3.1 0 0 1-3.1-2.7Z" />
+        <path d="M13.2 7.3c2 .7 4.1-.2 5.8-.1" />
+        <path d="M16.1 10.6v7.3" />
+        <path d="M13.5 17.9h5.2" />
       </g>
     </svg>
   );
