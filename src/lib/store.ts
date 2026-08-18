@@ -57,8 +57,13 @@ export type ShoppingCategory =
   | "Desechables"
   | "Otros";
 
+export type ShoppingListKind = "bodega" | "menaje";
+
 export interface ShoppingItem {
   id: string;
+  list?: ShoppingListKind; // bodeguero (catálogo proveedor) o menaje/otros
+  providerCode?: string;
+  providerPrice?: number;
   name: string;
   qty?: string; // texto libre: "2 packs", "1 caja"…
   category: ShoppingCategory;

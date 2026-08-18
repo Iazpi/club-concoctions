@@ -7,10 +7,12 @@ import {
   deleteShoppingItem,
   clearBoughtShopping,
   type ShoppingItem,
+  type ShoppingListKind,
 } from "@/lib/store";
 import { SOCIOS } from "@/lib/catalog";
+import { searchProvider, LIST_LABEL } from "@/lib/provider-catalog";
 import { Card, Input, EmptyState } from "@/components/ui";
-import { Plus, Check, Trash2, RotateCcw } from "lucide-react";
+import { Plus, Check, Trash2, RotateCcw, Wine, Utensils } from "lucide-react";
 
 type Tab = "pendientes" | "comprados";
 
@@ -19,8 +21,11 @@ const relative = (ts: number) => {
   return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}`;
 };
 
+const listOf = (i: ShoppingItem): ShoppingListKind => i.list ?? "menaje";
+
 export function Shopping() {
   const [tab, setTab] = useState<Tab>("pendientes");
+  const [list, setList] = useState<ShoppingListKind>("bodega");
   const items = useShopping();
 
   const pending = useMemo(
@@ -32,6 +37,9 @@ export function Shopping() {
     [items],
   );
 
+  const pendingInList = pending.filter((i) => listOf(i) === list);
+  const boughtInList = bought.filter((i) => listOf(i) === list);
+
   return (
     <div className="space-y-4">
       <div className="flex gap-1 border-b border-border">
@@ -39,25 +47,43 @@ export function Shopping() {
         <TabBtn active={tab === "comprados"} onClick={() => setTab("comprados")} label="Comprados" count={bought.length} />
       </div>
 
+      <ListSwitch
+        value={list}
+        onChange={setList}
+        counts={{
+          bodega: (tab === "pendientes" ? pending : bought).filter((i) => listOf(i) === "bodega").length,
+          menaje: (tab === "pendientes" ? pending : bought).filter((i) => listOf(i) === "menaje").length,
+        }}
+      />
+
       {tab === "pendientes" ? (
         <>
-          <h2 className="text-center text-xl font-bold tracking-wide">LISTA DE COMPRA</h2>
-          <AddForm />
-          {pending.length === 0 ? (
-            <EmptyState title="No falta nada" hint="Añade lo que se esté acabando." />
+          <h2 className="text-center text-xl font-bold tracking-wide">
+            {list === "bodega" ? "PEDIDO AL BODEGUERO" : "MENAJE Y OTROS"}
+          </h2>
+          <AddForm list={list} />
+          {pendingInList.length === 0 ? (
+            <EmptyState
+              title="No falta nada"
+              hint={
+                list === "bodega"
+                  ? "Busca el artículo en el catálogo del proveedor."
+                  : "Añade vasos, servilletas o cualquier cosa de fuera del proveedor."
+              }
+            />
           ) : (
             <div className="space-y-2">
-              {pending.map((i) => (
+              {pendingInList.map((i) => (
                 <PendingRow key={i.id} item={i} onBought={() => setTab("comprados")} />
               ))}
             </div>
           )}
         </>
-      ) : bought.length === 0 ? (
+      ) : boughtInList.length === 0 ? (
         <EmptyState title="Todavía no se ha comprado nada" hint="Aquí verás lo ya comprado y quién lo compró." />
       ) : (
         <div className="space-y-2">
-          {bought.map((i) => (
+          {boughtInList.map((i) => (
             <BoughtRow key={i.id} item={i} />
           ))}
           <button
@@ -70,6 +96,40 @@ export function Shopping() {
           </button>
         </div>
       )}
+    </div>
+  );
+}
+
+function ListSwitch({
+  value,
+  onChange,
+  counts,
+}: {
+  value: ShoppingListKind;
+  onChange: (v: ShoppingListKind) => void;
+  counts: Record<ShoppingListKind, number>;
+}) {
+  const opts: { key: ShoppingListKind; icon: typeof Wine }[] = [
+    { key: "bodega", icon: Wine },
+    { key: "menaje", icon: Utensils },
+  ];
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {opts.map(({ key, icon: Icon }) => (
+        <button
+          key={key}
+          onClick={() => onChange(key)}
+          className={`flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+            value === key
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border bg-card/40 text-muted-foreground"
+          }`}
+        >
+          <Icon className="w-4 h-4" strokeWidth={1.5} />
+          {LIST_LABEL[key]}
+          {counts[key] ? <span className="text-xs opacity-70">({counts[key]})</span> : null}
+        </button>
+      ))}
     </div>
   );
 }
@@ -98,39 +158,58 @@ function TabBtn({
   );
 }
 
-function AddForm() {
+function AddForm({ list }: { list: ShoppingListKind }) {
   const [name, setName] = useState("");
+  const suggestions = useMemo(() => searchProvider(list, name, 8), [list, name]);
 
-  const submit = () => {
-    const n = name.trim();
-    if (!n) return;
+  const add = (n: string, code?: string, price?: number) => {
+    const v = n.trim();
+    if (!v) return;
     addShoppingItem({
-      name: n,
+      name: v,
       category: "Otros",
       addedBy: "",
+      list,
+      providerCode: code,
+      providerPrice: price,
     });
     setName("");
   };
 
   return (
-    <Card className="p-3">
+    <Card className="p-3 space-y-2">
       <div className="flex gap-2">
         <Input
-          placeholder="¿Qué falta?"
+          placeholder={list === "bodega" ? "Buscar en el catálogo…" : "¿Qué falta?"}
           value={name}
           onChange={(e) => setName(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && submit()}
+          onKeyDown={(e) => e.key === "Enter" && add(name)}
           className="flex-1"
         />
         <button
           type="button"
           className="btn-primary flex items-center gap-1 disabled:opacity-50"
           disabled={!name.trim()}
-          onClick={submit}
+          onClick={() => add(name)}
         >
           <Plus className="w-4 h-4" /> Añadir
         </button>
       </div>
+
+      {suggestions.length > 0 && (
+        <div className="rounded-lg border border-border divide-y divide-border overflow-hidden">
+          {suggestions.map((s) => (
+            <button
+              key={s.code}
+              className="w-full text-left px-3 py-2 text-sm hover:bg-primary/10 flex items-center gap-2"
+              onClick={() => add(s.name, s.code, s.price)}
+            >
+              <span className="flex-1 min-w-0 truncate">{s.name}</span>
+              <span className="text-xs text-muted-foreground shrink-0">{s.price.toFixed(2)} €</span>
+            </button>
+          ))}
+        </div>
+      )}
     </Card>
   );
 }
@@ -154,7 +233,14 @@ function PendingRow({ item, onBought }: { item: ShoppingItem; onBought: () => vo
         >
           {open ? <Check className="w-4 h-4" /> : null}
         </button>
-        <p className="flex-1 font-semibold min-w-0">{item.name}</p>
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold min-w-0">{item.name}</p>
+          {item.providerPrice != null && (
+            <p className="text-xs text-muted-foreground">
+              Proveedor · {item.providerPrice.toFixed(2)} €
+            </p>
+          )}
+        </div>
         <button className="btn-ghost !p-2 text-destructive" onClick={() => deleteShoppingItem(item.id)} aria-label="Eliminar">
           <Trash2 className="w-4 h-4" />
         </button>
