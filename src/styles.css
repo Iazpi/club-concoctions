@@ -31,6 +31,32 @@
   --color-shopping: var(--shopping);
   --color-shopping-foreground: var(--shopping-foreground);
 
+  /* TPV */
+  --color-clay-50: var(--clay-50);
+  --color-clay-100: var(--clay-100);
+  --color-clay-200: var(--clay-200);
+  --color-clay-300: var(--clay-300);
+  --color-clay-600: var(--clay-600);
+  --color-clay-700: var(--clay-700);
+  --color-clay-800: var(--clay-800);
+  --color-terra-600: var(--terra-600);
+  --color-terra-700: var(--terra-700);
+  --color-cat-agua: var(--cat-agua);
+  --color-cat-agua-ink: var(--cat-agua-ink);
+  --color-cat-cerveza: var(--cat-cerveza);
+  --color-cat-cerveza-ink: var(--cat-cerveza-ink);
+  --color-cat-vino: var(--cat-vino);
+  --color-cat-vino-ink: var(--cat-vino-ink);
+  --color-cat-vermut: var(--cat-vermut);
+  --color-cat-vermut-ink: var(--cat-vermut-ink);
+  --color-cat-combinados: var(--cat-combinados);
+  --color-cat-combinados-ink: var(--cat-combinados-ink);
+  --color-cat-cava: var(--cat-cava);
+  --color-cat-cava-ink: var(--cat-cava-ink);
+  --color-cat-picoteo: var(--cat-picoteo);
+  --color-cat-picoteo-ink: var(--cat-picoteo-ink);
+  --shadow-ticket: var(--shadow-ticket);
+
   --font-display: "Fraunces", Georgia, serif;
 }
 
