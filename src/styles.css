@@ -31,6 +31,32 @@
   --color-shopping: var(--shopping);
   --color-shopping-foreground: var(--shopping-foreground);
 
+  /* TPV */
+  --color-clay-50: var(--clay-50);
+  --color-clay-100: var(--clay-100);
+  --color-clay-200: var(--clay-200);
+  --color-clay-300: var(--clay-300);
+  --color-clay-600: var(--clay-600);
+  --color-clay-700: var(--clay-700);
+  --color-clay-800: var(--clay-800);
+  --color-terra-600: var(--terra-600);
+  --color-terra-700: var(--terra-700);
+  --color-cat-agua: var(--cat-agua);
+  --color-cat-agua-ink: var(--cat-agua-ink);
+  --color-cat-cerveza: var(--cat-cerveza);
+  --color-cat-cerveza-ink: var(--cat-cerveza-ink);
+  --color-cat-vino: var(--cat-vino);
+  --color-cat-vino-ink: var(--cat-vino-ink);
+  --color-cat-vermut: var(--cat-vermut);
+  --color-cat-vermut-ink: var(--cat-vermut-ink);
+  --color-cat-combinados: var(--cat-combinados);
+  --color-cat-combinados-ink: var(--cat-combinados-ink);
+  --color-cat-cava: var(--cat-cava);
+  --color-cat-cava-ink: var(--cat-cava-ink);
+  --color-cat-picoteo: var(--cat-picoteo);
+  --color-cat-picoteo-ink: var(--cat-picoteo-ink);
+  --shadow-ticket: var(--shadow-ticket);
+
   --font-display: "Fraunces", Georgia, serif;
 }
 
@@ -58,6 +84,44 @@
   --shopping-foreground: oklch(0.985 0.008 85);
 
   --info-foreground: oklch(0.985 0.008 85);
+
+  /* TPV — paleta barro artesano */
+  --clay-50: oklch(0.985 0.004 85);
+  --clay-100: oklch(0.962 0.009 85);
+  --clay-200: oklch(0.905 0.024 75);
+  --clay-300: oklch(0.845 0.03 72);
+  --clay-600: oklch(0.5 0.03 55);
+  --clay-700: oklch(0.42 0.032 55);
+  --clay-800: oklch(0.335 0.033 55);
+  --terra-600: oklch(0.487 0.108 33);
+  --terra-700: oklch(0.418 0.098 32);
+  --cat-agua: oklch(0.82 0.09 220);
+  --cat-agua-ink: oklch(0.48 0.11 232);
+  --cat-cerveza: oklch(0.85 0.14 88);
+  --cat-cerveza-ink: oklch(0.53 0.12 78);
+  --cat-vino: oklch(0.45 0.14 12);
+  --cat-vino-ink: oklch(0.45 0.14 12);
+  --cat-vermut: oklch(0.79 0.15 55);
+  --cat-vermut-ink: oklch(0.52 0.15 45);
+  --cat-combinados: oklch(0.5 0.11 285);
+  --cat-combinados-ink: oklch(0.5 0.11 285);
+  --cat-cava: oklch(0.88 0.1 105);
+  --cat-cava-ink: oklch(0.52 0.09 100);
+  --cat-picoteo: oklch(0.83 0.12 145);
+  --cat-picoteo-ink: oklch(0.47 0.1 148);
+  --shadow-ticket: 0 -20px 45px -20px oklch(0.335 0.033 55 / 0.45);
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
 }
 
 @layer base {
