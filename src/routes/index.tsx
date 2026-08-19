@@ -8,7 +8,8 @@ import { Tariff } from "@/components/Tariff";
 import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
 import { Shopping } from "@/components/Shopping";
-import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck, ShoppingCart } from "lucide-react";
+import { Tpv } from "@/components/Tpv";
+import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck, ShoppingCart, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas" | "compra";
+type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas" | "compra" | "tpv";
 
 function ToastingGlasses({ className }: { className?: string }) {
   return (
@@ -90,6 +91,12 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
     icon: <ShoppingCart className="w-12 h-12" strokeWidth={1.5} />,
+  },
+  {
+    id: "tpv",
+    label: "TPV",
+    subtitle: "Punto de venta rápido",
+    icon: <CreditCard className="w-12 h-12" strokeWidth={1.5} />,
   },
   {
     id: "tarifa",
@@ -167,6 +174,8 @@ function Index() {
           <Reservations />
         ) : tab === "compra" ? (
           <Shopping />
+        ) : tab === "tpv" ? (
+          <Tpv />
         ) : (
           <Launcher onOpen={setTab} />
         )}
