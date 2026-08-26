@@ -67,43 +67,43 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[
     id: "eventos",
     label: "EVENTOS",
     subtitle: "Comidas y actos",
-    icon: <ToastingGlasses className="w-12 h-12" />,
+    icon: <ToastingGlasses className="w-16 h-16 sm:w-20 sm:h-20" />,
   },
   {
     id: "historico",
     label: "HISTÓRICO",
     subtitle: "Consumo mensual",
-    icon: <HistoryIcon className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <HistoryIcon className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "mvp",
     label: "MVP DEL MES",
     subtitle: "Clasificación",
-    icon: <Trophy className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <Trophy className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "reservas",
     label: "RESERVAS",
     subtitle: "Local para eventos privados",
-    icon: <CalendarCheck className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <CalendarCheck className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "compra",
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
-    icon: <ShoppingCart className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <ShoppingCart className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "tpv",
     label: "TPV",
     subtitle: "Punto de venta rápido",
-    icon: <CreditCard className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <CreditCard className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "tarifa",
     label: "TARIFA",
     subtitle: "Lista de precios",
-    icon: <ListOrdered className="w-12 h-12" strokeWidth={1.5} />,
+    icon: <ListOrdered className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
 ];
 
@@ -187,13 +187,13 @@ function Index() {
 
 function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
-    <div className="py-8">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-8 max-w-md mx-auto">
+    <div className="py-8 sm:py-12 min-h-[55vh] flex items-center justify-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-10 sm:gap-x-10 sm:gap-y-14 w-full max-w-2xl mx-auto px-4">
         {APPS.map((a) => (
           <button
             key={a.id}
             onClick={() => onOpen(a.id)}
-            className="group flex flex-col items-center gap-2 focus:outline-none text-primary"
+            className="group flex flex-col items-center gap-3 focus:outline-none text-primary"
           >
             <CopperIcon
               icon={a.icon}
