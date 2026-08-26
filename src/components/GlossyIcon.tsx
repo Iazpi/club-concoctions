@@ -1,22 +1,22 @@
-import { cloneElement, type ReactElement } from "react";
+import type { ReactNode } from "react";
 
 export function GlossyIcon({
   icon,
   className,
 }: {
-  icon: ReactElement;
+  icon: ReactNode;
   className?: string;
 }) {
   return (
     <span className={`relative inline-flex glossy-icon ${className ?? ""}`}>
       {/* Capa base en terracota */}
-      {cloneElement(icon, { className: "text-primary" })}
+      <span className="text-primary">{icon}</span>
       {/* Reflejo de luz en la parte superior */}
       <span
-        className="absolute inset-0 pointer-events-none glossy-icon-highlight"
+        className="absolute inset-0 inline-flex items-center justify-center pointer-events-none glossy-icon-highlight text-primary-foreground/80"
         aria-hidden="true"
       >
-        {cloneElement(icon, { className: "text-primary-foreground/80" })}
+        {icon}
       </span>
       {/* Brillo radial sutil */}
       <span
