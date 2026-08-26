@@ -9,6 +9,7 @@ import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
 import { Shopping } from "@/components/Shopping";
 import { Tpv } from "@/components/Tpv";
+import { GlossyIcon } from "@/components/GlossyIcon";
 import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck, ShoppingCart, CreditCard } from "lucide-react";
 
 export const Route = createFileRoute("/")({
