@@ -187,7 +187,7 @@ function Index() {
 
 function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
-    <div className="py-8 sm:py-12 min-h-[55vh] flex items-center justify-center">
+    <div className="py-8 sm:py-12 min-h-[calc(100dvh-4rem)] flex items-center justify-center">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-10 sm:gap-x-10 sm:gap-y-14 w-full max-w-2xl mx-auto px-4">
         {APPS.map((a) => (
           <button
