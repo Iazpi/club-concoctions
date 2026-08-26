@@ -197,7 +197,7 @@ function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
           >
             <CopperIcon
               icon={a.icon}
-              className="w-16 h-16 sm:w-20 sm:h-20 transition-transform group-hover:scale-110 group-active:scale-95"
+              className="transition-transform group-hover:scale-110 group-active:scale-95"
             />
             <span className="text-xs sm:text-sm font-semibold tracking-wide text-center text-foreground">
               {a.label}
