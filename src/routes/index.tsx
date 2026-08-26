@@ -195,9 +195,10 @@ function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
             onClick={() => onOpen(a.id)}
             className="group flex flex-col items-center gap-2 focus:outline-none text-primary"
           >
-            <span className="transition-transform group-hover:scale-110 group-active:scale-95">
-              {a.icon}
-            </span>
+            <GlossyIcon
+              icon={a.icon}
+              className="transition-transform group-hover:scale-110 group-active:scale-95"
+            />
             <span className="text-xs sm:text-sm font-semibold tracking-wide text-center text-foreground">
               {a.label}
             </span>
