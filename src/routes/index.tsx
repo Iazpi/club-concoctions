@@ -187,17 +187,17 @@ function Index() {
 function Launcher({ onOpen }: { onOpen: (t: Tab) => void }) {
   return (
     <div className="py-8">
-      <div className="grid grid-cols-2 gap-x-6 gap-y-8 max-w-md mx-auto">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-3xl mx-auto">
         {APPS.map((a) => (
           <button
             key={a.id}
             onClick={() => onOpen(a.id)}
-            className="group flex flex-col items-center gap-2 focus:outline-none text-primary"
+            className="group flex flex-col items-center justify-center aspect-square p-5 rounded-2xl border border-border bg-card/95 shadow-sm transition-colors hover:border-primary/40 focus:outline-none"
           >
-            <span className="transition-transform group-hover:scale-110 group-active:scale-95">
+            <span className="mb-3 text-primary/70 group-hover:text-primary transition-colors [&_svg]:w-8 [&_svg]:h-8 [&_svg]:stroke-[1.25]">
               {a.icon}
             </span>
-            <span className="text-xs sm:text-sm font-semibold tracking-wide text-center text-foreground">
+            <span className="text-[10px] sm:text-xs font-medium tracking-wider text-foreground/70 uppercase text-center group-hover:text-foreground transition-colors">
               {a.label}
             </span>
           </button>
