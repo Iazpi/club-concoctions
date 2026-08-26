@@ -161,3 +161,13 @@
 @utility chip {
   @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
 }
+@utility glossy-icon {
+  filter: drop-shadow(0 2px 2px oklch(0.335 0.033 55 / 0.18));
+}
+@utility glossy-icon-highlight {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0) 52%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0) 52%);
+}
+@utility glossy-icon-shine {
+  background: radial-gradient(circle at 32% 18%, oklch(1 0 0 / 0.34), transparent 58%);
+}
