@@ -168,22 +168,22 @@
 @utility copper-layer-shadow {
   color: oklch(0.32 0.07 40);
   transform: translateY(1.5px);
-}
-@utility copper-layer-shadow svg {
-  stroke-width: 2.6;
+  & svg {
+    stroke-width: 2.6;
+  }
 }
 @utility copper-layer-body {
   color: oklch(0.62 0.13 45);
-}
-@utility copper-layer-body svg {
-  stroke-width: 2.2;
+  & svg {
+    stroke-width: 2.2;
+  }
 }
 @utility copper-layer-highlight {
   color: oklch(0.85 0.09 60);
   transform: translateY(-1px);
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 70%);
   -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0) 70%);
-}
-@utility copper-layer-highlight svg {
-  stroke-width: 2.2;
+  & svg {
+    stroke-width: 2.2;
+  }
 }
