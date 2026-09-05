@@ -60,7 +60,7 @@ export function EventView({ event }: { event: Event }) {
   const addGuest = () => {
     const n = newName.trim();
     if (!n) return;
-    addAttendee(event.id, n, false);
+    addAttendee(event.id, n, guestSocio);
     setNewName("");
   };
 
