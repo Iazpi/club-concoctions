@@ -19,6 +19,7 @@ import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
+  const [guestSocio, setGuestSocio] = useState(false);
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
   const [reshare, setReshare] = useState<{ product: Product; attendee: Attendee } | null>(null);
 
@@ -154,7 +155,7 @@ export function EventView({ event }: { event: Event }) {
 
           <div>
             <h3 className="text-sm font-semibold text-muted-foreground mb-2">
-              Añadir no socio
+              Añadir invitado
             </h3>
             <div className="flex flex-col sm:flex-row gap-2">
               <input
@@ -168,7 +169,19 @@ export function EventView({ event }: { event: Event }) {
                 <UserPlus className="w-4 h-4" /> Añadir
               </button>
             </div>
+            <label className="mt-2 flex items-center gap-2 text-sm w-fit cursor-pointer">
+              <input
+                type="checkbox"
+                checked={guestSocio}
+                onChange={(e) => setGuestSocio(e.target.checked)}
+                className="w-4 h-4 accent-[color:var(--primary)]"
+              />
+              <span className={guestSocio ? "text-primary font-medium" : "text-muted-foreground"}>
+                Aplicar tarifa de socio
+              </span>
+            </label>
           </div>
+
         </Card>
       )}
 
