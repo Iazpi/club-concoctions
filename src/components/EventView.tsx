@@ -19,6 +19,7 @@ import { Plus, Minus, Trash2, UserPlus, Users } from "lucide-react";
 
 export function EventView({ event }: { event: Event }) {
   const [newName, setNewName] = useState("");
+  const [guestSocio, setGuestSocio] = useState(false);
   const [sheetAtt, setSheetAtt] = useState<Attendee | null>(null);
   const [reshare, setReshare] = useState<{ product: Product; attendee: Attendee } | null>(null);
 
