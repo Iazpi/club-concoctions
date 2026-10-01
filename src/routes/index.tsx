@@ -9,8 +9,9 @@ import { MvpMonth } from "@/components/MvpMonth";
 import { Reservations } from "@/components/Reservations";
 import { Shopping } from "@/components/Shopping";
 import { Tpv } from "@/components/Tpv";
+import { StockBodega } from "@/components/StockBodega";
 import { CopperIcon } from "@/components/CopperIcon";
-import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck, ShoppingCart, CreditCard } from "lucide-react";
+import { ArrowLeft, History as HistoryIcon, ListOrdered, Trophy, RefreshCw, CalendarCheck, ShoppingCart, CreditCard, Warehouse } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas" | "compra" | "tpv";
+type Tab = "eventos" | "historico" | "mvp" | "tarifa" | "reservas" | "compra" | "tpv" | "stock";
 
 function ToastingGlasses({ className }: { className?: string }) {
   return (
@@ -92,6 +93,12 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[
     label: "LISTA DE LA COMPRA",
     subtitle: "Qué falta en el local",
     icon: <ShoppingCart className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
+  },
+  {
+    id: "stock",
+    label: "STOCK BODEGA",
+    subtitle: "Lo que hay abajo",
+    icon: <Warehouse className="w-16 h-16 sm:w-20 sm:h-20" strokeWidth={1.5} />,
   },
   {
     id: "tpv",
@@ -175,6 +182,8 @@ function Index() {
           <Reservations />
         ) : tab === "compra" ? (
           <Shopping />
+        ) : tab === "stock" ? (
+          <StockBodega />
         ) : tab === "tpv" ? (
           <Tpv />
         ) : (
