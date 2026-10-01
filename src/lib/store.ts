@@ -83,6 +83,29 @@ export interface State {
   products?: Product[];
   reservations?: Reservation[];
   shopping?: ShoppingItem[];
+  stockItems?: StockItem[];
+  stockMoves?: StockMove[];
+}
+
+export interface StockItem {
+  id: string;
+  name: string;
+  qty: number;
+  createdAt: number;
+}
+
+export type StockMoveType = "entrada" | "subida" | "ajuste";
+
+export interface StockMove {
+  id: string;
+  itemId: string;
+  itemName: string;
+  type: StockMoveType;
+  qty: number; // cantidad movida (para ajuste: stock resultante)
+  before: number;
+  after: number;
+  who: string;
+  ts: number;
 }
 
 
@@ -522,4 +545,77 @@ export function deleteShoppingItem(id: string) {
 
 export function clearBoughtShopping() {
   setShopping((state.shopping ?? []).filter((i) => !i.bought));
+}
+
+// ---- Stock bodega ----
+const EMPTY_STOCK_ITEMS: StockItem[] = [];
+const EMPTY_STOCK_MOVES: StockMove[] = [];
+
+export function useStockItems(): StockItem[] {
+  return useStore((s) => s.stockItems ?? EMPTY_STOCK_ITEMS);
+}
+
+export function useStockMoves(): StockMove[] {
+  return useStore((s) => s.stockMoves ?? EMPTY_STOCK_MOVES);
+}
+
+export function addStockItem(name: string, qty: number, who: string) {
+  const item: StockItem = { id: uid(), name: name.trim(), qty: 0, createdAt: Date.now() };
+  state = { ...state, stockItems: [...(state.stockItems ?? []), item] };
+  emit();
+  if (qty > 0) moveStock(item.id, "entrada", qty, who);
+  return item.id;
+}
+
+export function renameStockItem(id: string, name: string) {
+  const v = name.trim();
+  if (!v) return;
+  state = {
+    ...state,
+    stockItems: (state.stockItems ?? []).map((i) => (i.id === id ? { ...i, name: v } : i)),
+  };
+  emit();
+}
+
+export function deleteStockItem(id: string) {
+  state = { ...state, stockItems: (state.stockItems ?? []).filter((i) => i.id !== id) };
+  emit();
+}
+
+// entrada: suma; subida: resta (no baja de 0); ajuste: fija el stock real
+export function moveStock(itemId: string, type: StockMoveType, qty: number, who: string) {
+  const item = (state.stockItems ?? []).find((i) => i.id === itemId);
+  if (!item) return;
+  const before = item.qty;
+  let after = before;
+  let moved = qty;
+  if (type === "entrada") after = before + qty;
+  else if (type === "subida") {
+    moved = Math.min(qty, before);
+    after = before - moved;
+  } else after = Math.max(0, qty);
+  if (type !== "ajuste" && moved <= 0) return;
+  if (type === "ajuste" && after === before) return;
+  const move: StockMove = {
+    id: uid(),
+    itemId,
+    itemName: item.name,
+    type,
+    qty: type === "ajuste" ? after : moved,
+    before,
+    after,
+    who,
+    ts: Date.now(),
+  };
+  state = {
+    ...state,
+    stockItems: (state.stockItems ?? []).map((i) => (i.id === itemId ? { ...i, qty: after } : i)),
+    stockMoves: [move, ...(state.stockMoves ?? [])].slice(0, 500),
+  };
+  emit();
+}
+
+export function clearStockMoves() {
+  state = { ...state, stockMoves: [] };
+  emit();
 }
