@@ -7,6 +7,9 @@ import {
   deleteStockItem,
   renameStockItem,
   clearStockMoves,
+  setStockFamily,
+  STOCK_FAMILIES,
+  type StockFamily,
   type StockItem,
   type StockMove,
 } from "@/lib/store";
@@ -22,6 +25,91 @@ const fmtDate = (ts: number) => {
   const p = (n: number) => String(n).padStart(2, "0");
   return `${p(d.getDate())}/${p(d.getMonth() + 1)} ${p(d.getHours())}:${p(d.getMinutes())}`;
 };
+
+type Qty = { packs: string; per: string; total: string };
+const emptyQty: Qty = { packs: "", per: "", total: "" };
+const toInt = (v: string) => Math.max(0, parseInt(v || "0", 10) || 0);
+const famOf = (i: StockItem): StockFamily => i.family ?? "Otros";
+
+// packs x uds/pack = total; el total también se puede escribir a mano (uds sueltas)
+function QtyFields({ value, onChange }: { value: Qty; onChange: (q: Qty) => void }) {
+  const recalc = (packs: string, per: string, total: string): Qty => {
+    const t = toInt(packs) * toInt(per);
+    return { packs, per, total: t > 0 ? String(t) : total };
+  };
+  const lbl = "block text-[11px] text-muted-foreground mb-0.5 text-center";
+  return (
+    <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-end gap-1.5">
+      <label>
+        <span className={lbl}>Nº packs</span>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={0}
+          value={value.packs}
+          onChange={(e) => onChange(recalc(e.target.value, value.per, value.total))}
+          className="w-full text-center"
+        />
+      </label>
+      <span className="pb-2 text-muted-foreground">×</span>
+      <label>
+        <span className={lbl}>Uds/pack</span>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={0}
+          placeholder="12"
+          value={value.per}
+          onChange={(e) => onChange(recalc(value.packs, e.target.value, value.total))}
+          className="w-full text-center"
+        />
+      </label>
+      <span className="pb-2 text-muted-foreground">=</span>
+      <label>
+        <span className={lbl}>Total uds</span>
+        <Input
+          type="number"
+          inputMode="numeric"
+          min={0}
+          value={value.total}
+          onChange={(e) => onChange({ ...value, packs: "", total: e.target.value })}
+          className="w-full text-center font-bold"
+        />
+      </label>
+    </div>
+  );
+}
+
+function FamilyChips({
+  value,
+  onChange,
+  withAll,
+  counts,
+}: {
+  value: StockFamily | "Todos";
+  onChange: (v: any) => void;
+  withAll?: boolean;
+  counts?: Record<string, number>;
+}) {
+  const opts: (StockFamily | "Todos")[] = withAll ? ["Todos", ...STOCK_FAMILIES] : STOCK_FAMILIES;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {opts.map((o) => (
+        <button
+          key={o}
+          type="button"
+          onClick={() => onChange(o)}
+          className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
+            value === o ? "border-primary bg-primary/10 text-primary" : "border-border bg-card/40 text-muted-foreground"
+          }`}
+        >
+          {o}
+          {counts?.[o] ? <span className="ml-1 opacity-70">({counts[o]})</span> : null}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function useWho() {
   const [who, setWhoState] = useState<string>(() => {
@@ -94,53 +182,52 @@ function TabBtn({
 
 function StockTab({ items, who }: { items: StockItem[]; who: string }) {
   const [newName, setNewName] = useState("");
-  const [newQty, setNewQty] = useState("");
+  const [newQty, setNewQty] = useState<Qty>(emptyQty);
+  const [newFamily, setNewFamily] = useState<StockFamily>("Alcohol");
+  const [famFilter, setFamFilter] = useState<StockFamily | "Todos">("Todos");
   const [filter, setFilter] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
 
   const sorted = useMemo(() => {
     const q = filter.trim().toLowerCase();
     return [...items]
+      .filter((i) => famFilter === "Todos" || famOf(i) === famFilter)
       .filter((i) => !q || i.name.toLowerCase().includes(q))
       .sort((a, b) => a.name.localeCompare(b.name, "es"));
-  }, [items, filter]);
+  }, [items, filter, famFilter]);
 
   const add = () => {
     const n = newName.trim();
     if (!n) return;
-    addStockItem(n, Math.max(0, parseInt(newQty || "0", 10) || 0), who);
+    addStockItem(n, toInt(newQty.total), who, newFamily);
     setNewName("");
-    setNewQty("");
+    setNewQty({ ...emptyQty, per: newQty.per });
   };
 
-  const total = items.reduce((a, i) => a + i.qty, 0);
+  const shown = items.filter((i) => famFilter === "Todos" || famOf(i) === famFilter);
+  const total = shown.reduce((a, i) => a + i.qty, 0);
+  const counts: Record<string, number> = { Todos: items.length };
+  for (const i of items) counts[famOf(i)] = (counts[famOf(i)] ?? 0) + 1;
 
   return (
     <div className="space-y-3">
       <Card className="p-3 space-y-2">
         <p className="text-sm font-semibold">Nuevo producto en bodega</p>
-        <div className="flex gap-2">
-          <Input
-            placeholder="Ej. Cerveza Mahou caja"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && add()}
-            className="flex-1 min-w-0"
-          />
-          <Input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            placeholder="Uds"
-            value={newQty}
-            onChange={(e) => setNewQty(e.target.value)}
-            className="w-20"
-          />
-          <button className="btn-primary flex items-center gap-1 disabled:opacity-50" disabled={!newName.trim()} onClick={add}>
-            <Plus className="w-4 h-4" /> Añadir
-          </button>
-        </div>
+        <Input
+          placeholder="Ej. Cerveza Mahou"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && add()}
+          className="w-full"
+        />
+        <FamilyChips value={newFamily} onChange={setNewFamily} />
+        <QtyFields value={newQty} onChange={setNewQty} />
+        <button className="btn-primary w-full flex items-center justify-center gap-1 disabled:opacity-50" disabled={!newName.trim()} onClick={add}>
+          <Plus className="w-4 h-4" /> Añadir{toInt(newQty.total) > 0 ? ` (${toInt(newQty.total)} uds)` : ""}
+        </button>
       </Card>
+
+      {items.length > 0 && <FamilyChips value={famFilter} onChange={setFamFilter} withAll counts={counts} />}
 
       {items.length > 0 && (
         <div className="flex items-center gap-2">
@@ -148,7 +235,7 @@ function StockTab({ items, who }: { items: StockItem[]; who: string }) {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input placeholder="Buscar…" value={filter} onChange={(e) => setFilter(e.target.value)} className="w-full !pl-9" />
           </div>
-          <span className="text-xs font-semibold text-foreground shrink-0">{total} uds en total</span>
+          <span className="text-xs font-semibold text-foreground shrink-0">{total} uds</span>
         </div>
       )}
 
@@ -187,15 +274,22 @@ function StockRow({
   open: boolean;
   onToggle: () => void;
 }) {
-  const [amount, setAmount] = useState("1");
+  const [qty, setQty] = useState<Qty>(emptyQty);
   const [count, setCount] = useState("");
-  const n = Math.max(0, parseInt(amount || "0", 10) || 0);
+  const n = toInt(qty.total);
+  const move = (type: "entrada" | "subida") => {
+    moveStock(item.id, type, n, who);
+    setQty({ ...emptyQty, per: qty.per });
+  };
   const empty = item.qty === 0;
 
   return (
     <Card className="p-3">
       <button className="w-full flex items-center gap-3 text-left" onClick={onToggle}>
-        <p className={`flex-1 min-w-0 font-semibold truncate ${empty ? "text-muted-foreground" : ""}`}>{item.name}</p>
+        <div className="flex-1 min-w-0">
+          <p className={`font-semibold truncate ${empty ? "text-muted-foreground" : ""}`}>{item.name}</p>
+          <p className="text-[11px] text-muted-foreground">{famOf(item)}</p>
+        </div>
         <span
           className={`min-w-12 text-center rounded-lg px-3 py-1 text-lg font-bold tabular-nums ${
             empty ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"
@@ -207,35 +301,19 @@ function StockRow({
 
       {open && (
         <div className="mt-3 pt-3 border-t border-border space-y-3">
-          <div className="flex items-center gap-2">
-            <button className="btn-ghost !p-2 border border-border" onClick={() => setAmount(String(Math.max(1, n - 1)))} aria-label="Menos">
-              −
-            </button>
-            <Input
-              type="number"
-              inputMode="numeric"
-              min={1}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="w-20 text-center"
-            />
-            <button className="btn-ghost !p-2 border border-border" onClick={() => setAmount(String(n + 1))} aria-label="Más">
-              +
-            </button>
-            <span className="text-xs text-muted-foreground">unidades</span>
-          </div>
+          <QtyFields value={qty} onChange={setQty} />
           <div className="grid grid-cols-2 gap-2">
             <button
               className="btn-primary flex items-center justify-center gap-1 disabled:opacity-50"
               disabled={n <= 0}
-              onClick={() => moveStock(item.id, "entrada", n, who)}
+              onClick={() => move("entrada")}
             >
               <ArrowDownToLine className="w-4 h-4" /> Entra a bodega
             </button>
             <button
               className="btn-secondary flex items-center justify-center gap-1 disabled:opacity-50"
               disabled={n <= 0 || item.qty === 0}
-              onClick={() => moveStock(item.id, "subida", n, who)}
+              onClick={() => move("subida")}
             >
               <ArrowUpFromLine className="w-4 h-4" /> Sube a barra
             </button>
@@ -261,6 +339,21 @@ function StockRow({
             >
               <ClipboardCheck className="w-4 h-4" /> Contar
             </button>
+          </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-muted-foreground shrink-0">Familia</span>
+            <select
+              className="input-base flex-1"
+              value={famOf(item)}
+              onChange={(e) => setStockFamily(item.id, e.target.value as StockFamily)}
+            >
+              {STOCK_FAMILIES.map((f) => (
+                <option key={f} value={f}>
+                  {f}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex items-center justify-between gap-2 text-xs">
