@@ -87,9 +87,13 @@ export interface State {
   stockMoves?: StockMove[];
 }
 
+export type StockFamily = "Alcohol" | "Refresco" | "Menaje" | "Otros";
+export const STOCK_FAMILIES: StockFamily[] = ["Alcohol", "Refresco", "Menaje", "Otros"];
+
 export interface StockItem {
   id: string;
   name: string;
+  family?: StockFamily;
   qty: number;
   createdAt: number;
 }
@@ -559,8 +563,8 @@ export function useStockMoves(): StockMove[] {
   return useStore((s) => s.stockMoves ?? EMPTY_STOCK_MOVES);
 }
 
-export function addStockItem(name: string, qty: number, who: string) {
-  const item: StockItem = { id: uid(), name: name.trim(), qty: 0, createdAt: Date.now() };
+export function addStockItem(name: string, qty: number, who: string, family: StockFamily = "Otros") {
+  const item: StockItem = { id: uid(), name: name.trim(), family, qty: 0, createdAt: Date.now() };
   state = { ...state, stockItems: [...(state.stockItems ?? []), item] };
   emit();
   if (qty > 0) moveStock(item.id, "entrada", qty, who);
@@ -573,6 +577,14 @@ export function renameStockItem(id: string, name: string) {
   state = {
     ...state,
     stockItems: (state.stockItems ?? []).map((i) => (i.id === id ? { ...i, name: v } : i)),
+  };
+  emit();
+}
+
+export function setStockFamily(id: string, family: StockFamily) {
+  state = {
+    ...state,
+    stockItems: (state.stockItems ?? []).map((i) => (i.id === id ? { ...i, family } : i)),
   };
   emit();
 }
