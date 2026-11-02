@@ -177,7 +177,7 @@ export function Tpv({ onClose }: { onClose?: () => void }) {
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-        <div className="flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
           <nav className="no-scrollbar flex shrink-0 gap-2 overflow-x-auto px-4 py-3">
             {CATEGORIAS.map((c) => (
               <button
