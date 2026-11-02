@@ -185,7 +185,7 @@ function Index() {
         ) : tab === "stock" ? (
           <StockBodega />
         ) : tab === "tpv" ? (
-          <Tpv />
+          <Tpv onClose={() => setTab(null)} />
         ) : (
           <Launcher onOpen={setTab} />
         )}
