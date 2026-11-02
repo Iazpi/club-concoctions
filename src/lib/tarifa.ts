@@ -1,3 +1,72 @@
+import imgAguaP from "@/assets/productos/agua-p.webp";
+import imgAguaG from "@/assets/productos/agua-g.webp";
+import imgRefresco from "@/assets/productos/refresco.webp";
+import imgZumo from "@/assets/productos/zumo.webp";
+import imgGaseosa from "@/assets/productos/gaseosa.webp";
+import imgCafe from "@/assets/productos/cafe.webp";
+import imgCafeLicor from "@/assets/productos/cafe-licor.webp";
+import imgCana from "@/assets/productos/cana.webp";
+import imgCanon from "@/assets/productos/canon.webp";
+import imgBotellin from "@/assets/productos/botellin.webp";
+import imgAlhambra from "@/assets/productos/alhambra-real.webp.asset.json";
+import imgSidra from "@/assets/productos/sidra-real.webp.asset.json";
+import imgCopaVino from "@/assets/productos/copa-vino.webp";
+import imgBotellaCasa from "@/assets/productos/botella-casa.webp";
+import imgBotellaPremium from "@/assets/productos/botella-premium.webp";
+import imgBotellaInurrieta400 from "@/assets/productos/botella-inurrieta-400.webp";
+import imgTintoVerano from "@/assets/productos/tinto-verano.webp";
+import imgCalimocho from "@/assets/productos/calimocho.webp";
+import imgVermut from "@/assets/productos/vermut.webp";
+import imgSpritz from "@/assets/productos/spritz.webp";
+import imgCubataCasa from "@/assets/productos/cubata-casa.webp";
+import imgCubataPremium from "@/assets/productos/cubata-premium.webp";
+import imgPacharan from "@/assets/productos/pacharan.webp";
+import imgChupito from "@/assets/productos/chupito.webp";
+import imgChupitoPremium from "@/assets/productos/chupito-premium.webp";
+import imgCava from "@/assets/productos/cava.webp";
+import imgTaittinger from "@/assets/productos/taittinger-real.webp.asset.json";
+import imgVeuve from "@/assets/productos/veuve-real.webp.asset.json";
+import imgPatatas from "@/assets/productos/patatas.webp";
+import imgAceitunas from "@/assets/productos/aceitunas.webp";
+import imgFrutos from "@/assets/productos/frutos.webp";
+import imgEncurtidos from "@/assets/productos/encurtidos.webp";
+
+/** Foto de producto por consumición (id de producto → imagen). */
+export const FOTOS: Record<string, string> = {
+  "agua-p": imgAguaP,
+  "agua-g": imgAguaG,
+  refresco: imgRefresco,
+  zumo: imgZumo,
+  gaseosa: imgGaseosa,
+  cafe: imgCafe,
+  "cafe-licor": imgCafeLicor,
+  cana: imgCana,
+  canon: imgCanon,
+  botellin: imgBotellin,
+  alhambra: imgAlhambra.url,
+  sidra: imgSidra.url,
+  "copa-vino": imgCopaVino,
+  "botella-casa": imgBotellaCasa,
+  "botella-premium": imgBotellaPremium,
+  "botella-inurrieta-400": imgBotellaInurrieta400,
+  "tinto-verano": imgTintoVerano,
+  calimocho: imgCalimocho,
+  vermut: imgVermut,
+  spritz: imgSpritz,
+  "cubata-casa": imgCubataCasa,
+  "cubata-premium": imgCubataPremium,
+  pacharan: imgPacharan,
+  chupito: imgChupito,
+  "chupito-premium": imgChupitoPremium,
+  cava: imgCava,
+  taittinger: imgTaittinger.url,
+  veuve: imgVeuve.url,
+  patatas: imgPatatas,
+  aceitunas: imgAceitunas,
+  frutos: imgFrutos,
+  encurtidos: imgEncurtidos,
+};
+
 export type Producto = {
   id: string;
   nombre: string;
