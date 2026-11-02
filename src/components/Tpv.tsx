@@ -130,7 +130,7 @@ export function Tpv({ onClose }: { onClose?: () => void }) {
   const resumen = lineas.map((l) => `${l.unidades} × ${l.producto.icono} ${l.producto.nombre}`).join(" + ");
 
   return (
-    <div className="fixed inset-0 z-50 flex h-[100dvh] flex-col overflow-hidden bg-clay-100 text-clay-800 select-none">
+    <div style={{ fontFamily: "Outfit, ui-sans-serif, system-ui, sans-serif" }} className="fixed inset-0 z-50 flex h-[100dvh] flex-col overflow-hidden bg-clay-100 text-clay-800 select-none">
       <header className="flex shrink-0 items-center justify-between border-b border-clay-200 bg-card px-4 py-3">
         <div className="flex items-center gap-3">
           {onClose && (
