@@ -290,7 +290,19 @@ function RequestForm({
           Tu reserva del {prettyDate(date)} ({SLOT_LABEL[slot]}) queda <strong>pendiente de aprobación</strong> por el
           administrador. Podrás ver la resolución en el calendario.
         </p>
-        <button className="btn-primary w-full justify-center" onClick={onDone}>
+        <a
+          className="btn-primary w-full justify-center flex items-center gap-2"
+          style={{ background: "#25D366", color: "#fff" }}
+          href={waLink(
+            WA_RESERVAS,
+            `Hola, he solicitado una reserva en Barro CB:\n📅 ${prettyDate(date)} (${SLOT_LABEL[slot]})\n👤 ${finalName}${!socio && surname.trim() ? " " + surname.trim() : ""}\n📝 ${reason.trim()}\n\n¿Puedes aprobarla en la app? Gracias.`,
+          )}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Avisar al administrador por WhatsApp
+        </a>
+        <button className="btn-ghost w-full justify-center" onClick={onDone}>
           Volver al calendario
         </button>
       </Card>

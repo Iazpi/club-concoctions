@@ -1,3 +1,4 @@
+import { waLink, WA_COMPRAS } from "@/lib/whatsapp";
 import { useMemo, useState } from "react";
 import {
   useShopping,
