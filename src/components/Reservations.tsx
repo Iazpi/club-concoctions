@@ -296,7 +296,7 @@ function RequestForm({
           style={{ background: "#25D366", color: "#fff" }}
           href={waLink(
             WA_RESERVAS,
-            `Hola, he solicitado una reserva en Barro CB:\n📅 ${prettyDate(date)} (${SLOT_LABEL[slot]})\n👤 ${finalName}${!socio && surname.trim() ? " " + surname.trim() : ""}\n📝 ${reason.trim()}\n\nApruébala o recházala aquí: ${typeof window !== "undefined" ? window.location.origin : "https://club-concoctions.lovable.app"}\n(Reservas → Administrador)\n\nGracias.`,
+            `Hola, he solicitado una reserva en Barro CB:\n📅 ${prettyDate(date)} (${SLOT_LABEL[slot]})\n👤 ${finalName}${!socio && surname.trim() ? " " + surname.trim() : ""}\n📝 ${reason.trim()}\n\nApruébala o recházala aquí: https://club-concoctions.lovable.app\n(Reservas → Administrador)\n\nGracias.`,
           )}
           target="_blank"
           rel="noopener noreferrer"
