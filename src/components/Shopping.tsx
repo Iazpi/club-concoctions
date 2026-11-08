@@ -175,7 +175,12 @@ function AddForm({ list }: { list: ShoppingListKind }) {
       providerPrice: price,
     });
     setName("");
+    setJustAdded((prev) => [...prev, v]);
   };
+  const [justAdded, setJustAdded] = useState<string[]>([]);
+  const waText = `Hola, he añadido a la lista de la compra (${LIST_LABEL[list]}) de Barro CB:\n${justAdded
+    .map((n) => `• ${n}`)
+    .join("\n")}\n\nGracias.`;
 
   return (
     <Card className="p-3 space-y-2">
@@ -209,6 +214,24 @@ function AddForm({ list }: { list: ShoppingListKind }) {
               <span className="text-xs text-muted-foreground shrink-0">{s.price.toFixed(2)} €</span>
             </button>
           ))}
+        </div>
+      )}
+
+      {justAdded.length > 0 && (
+        <div className="flex items-center gap-2 pt-1">
+          <a
+            className="btn-primary flex-1 justify-center flex items-center gap-2 text-sm"
+            style={{ background: "#25D366", color: "#fff" }}
+            href={waLink(WA_COMPRAS, waText)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setTimeout(() => setJustAdded([]), 500)}
+          >
+            Avisar al encargado por WhatsApp ({justAdded.length})
+          </a>
+          <button className="btn-ghost text-xs text-muted-foreground" onClick={() => setJustAdded([])}>
+            No avisar
+          </button>
         </div>
       )}
     </Card>
