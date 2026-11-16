@@ -164,7 +164,7 @@ function CalendarView({
             <div key={i}>{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1.5">
           {cells.map((d, i) => {
             if (!d) return <div key={i} />;
             const list = dayInfo.get(d) ?? [];
@@ -176,21 +176,13 @@ function CalendarView({
               <button
                 key={i}
                 onClick={() => onSelect(d)}
-                className={`res-day ${isSel ? "res-day-selected" : ""} ${isToday && !isSel ? "res-day-today" : ""} ${
-                  approved && !isSel ? "text-destructive font-semibold" : ""
-                }`}
+                className={`res-day ${
+                  approved ? "res-day-reserved" : pending ? "res-day-pending" : ""
+                } ${isSel ? "res-day-selected" : ""} ${isToday ? "res-day-today" : ""}`}
               >
                 {Number(d.slice(-2))}
-                {(approved || pending) && (
-                  <span
-                    className={`absolute bottom-1 w-1 h-1 rounded-full ${
-                      isSel
-                        ? "bg-primary-foreground"
-                        : approved
-                          ? "bg-destructive"
-                          : "bg-info"
-                    }`}
-                  />
+                {approved && pending && (
+                  <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-info ring-2 ring-card" />
                 )}
               </button>
             );
@@ -201,6 +193,7 @@ function CalendarView({
           <Legend className="bg-destructive" label="Reservado" />
           <Legend className="bg-info" label="Pendiente" />
           <Legend className="border border-input/70 bg-transparent" label="Libre" />
+          <Legend className="border-2 border-primary/70 bg-transparent" label="Hoy" />
         </div>
       </Card>
 
