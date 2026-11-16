@@ -330,12 +330,12 @@ function RequestForm({
                 key={s}
                 disabled={blocked}
                 onClick={() => setSlot(s)}
-                className={`px-3 py-2 rounded-xl text-sm font-semibold text-left transition-colors ${
+                className={`px-3 py-2 rounded-full border text-sm font-medium text-left transition-colors ${
                   blocked
-                    ? "bg-muted text-muted-foreground line-through cursor-not-allowed"
+                    ? "border-transparent bg-muted text-muted-foreground line-through cursor-not-allowed"
                     : slot === s
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-white/40 hover:bg-white/60"
+                      ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                      : "border-input/60 bg-white/30 hover:border-primary/50 hover:bg-primary/5"
                 }`}
               >
                 {SLOT_LABEL[s]}
@@ -440,7 +440,7 @@ function AdminPanel() {
         ) : (
           <ul className="space-y-3">
             {pending.map((r) => (
-              <li key={r.id} className="rounded-xl bg-white/40 p-3">
+              <li key={r.id} className="rounded-xl border border-border/70 bg-white/30 p-3">
                 <p className="font-semibold">
                   {r.name} {r.surname}
                 </p>
@@ -475,7 +475,7 @@ function AdminPanel() {
         ) : (
           <ul className="space-y-2">
             {resolved.map((r) => (
-              <li key={r.id} className="flex items-center gap-2 text-sm rounded-xl bg-white/40 p-2">
+              <li key={r.id} className="flex items-center gap-2 text-sm rounded-lg border-b border-border/50 py-2">
                 <span
                   className={`chip ${
                     r.status === "aprobada" ? "bg-destructive text-destructive-foreground" : "bg-muted text-muted-foreground"
