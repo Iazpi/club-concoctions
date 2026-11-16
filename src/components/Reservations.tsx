@@ -148,19 +148,23 @@ function CalendarView({
             <ChevronLeft className="w-4 h-4" />
           </button>
           <h3 className="font-display text-lg font-semibold italic tracking-wide">
-            {MONTHS[month]} <span className="not-italic text-muted-foreground font-normal text-base">{year}</span>
+            <span className="bg-gradient-to-r from-primary via-terra-600 to-accent bg-clip-text text-transparent">
+              {MONTHS[month]}
+            </span>{" "}
+            <span className="not-italic text-muted-foreground font-normal text-base">{year}</span>
           </h3>
           <button className="res-arrow" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
+        <div className="mx-auto mb-3 h-px w-28 bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
 
         <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80 mb-1.5">
           {DOW.map((d, i) => (
             <div key={i}>{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-1.5">
           {cells.map((d, i) => {
             if (!d) return <div key={i} />;
             const list = dayInfo.get(d) ?? [];
@@ -172,21 +176,13 @@ function CalendarView({
               <button
                 key={i}
                 onClick={() => onSelect(d)}
-                className={`res-day ${isSel ? "res-day-selected" : ""} ${isToday && !isSel ? "res-day-today" : ""} ${
-                  approved && !isSel ? "text-destructive font-semibold" : ""
-                }`}
+                className={`res-day ${
+                  approved ? "res-day-reserved" : pending ? "res-day-pending" : ""
+                } ${isSel ? "res-day-selected" : ""} ${isToday ? "res-day-today" : ""}`}
               >
                 {Number(d.slice(-2))}
-                {(approved || pending) && (
-                  <span
-                    className={`absolute bottom-1 w-1 h-1 rounded-full ${
-                      isSel
-                        ? "bg-primary-foreground"
-                        : approved
-                          ? "bg-destructive"
-                          : "bg-info"
-                    }`}
-                  />
+                {approved && pending && (
+                  <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-info ring-2 ring-card" />
                 )}
               </button>
             );
@@ -197,6 +193,7 @@ function CalendarView({
           <Legend className="bg-destructive" label="Reservado" />
           <Legend className="bg-info" label="Pendiente" />
           <Legend className="border border-input/70 bg-transparent" label="Libre" />
+          <Legend className="border-2 border-primary/70 bg-transparent" label="Hoy" />
         </div>
       </Card>
 
