@@ -50,8 +50,8 @@ export function Reservations() {
   const pending = reservations.filter((r) => r.status === "pendiente").length;
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-1 border-b border-border">
+    <div className="space-y-5">
+      <div className="flex gap-5 border-b border-border/70">
         <TabBtn active={tab === "calendario"} onClick={() => setTab("calendario")} label="Calendario" />
         <TabBtn active={tab === "solicitar"} onClick={() => setTab("solicitar")} label="Solicitar" />
         <TabBtn active={tab === "admin"} onClick={() => setTab("admin")} label="Admin" count={pending} />
@@ -87,13 +87,13 @@ function TabBtn({
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition-colors ${
-        active ? "border-primary text-primary" : "border-transparent text-muted-foreground"
+      className={`pb-2 text-[11px] font-semibold uppercase tracking-[0.14em] border-b-2 -mb-px transition-colors ${
+        active ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"
       }`}
     >
       {label}
       {!!count && (
-        <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1 rounded-full bg-accent text-accent-foreground text-[11px] font-bold">
+        <span className="ml-1.5 inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-bold">
           {count}
         </span>
       )}
