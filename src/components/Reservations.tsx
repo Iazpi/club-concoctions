@@ -142,25 +142,25 @@ function CalendarView({
 
   return (
     <div className="space-y-4">
-      <Card className="p-3">
-        <div className="flex items-center justify-between mb-2">
-          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
+      <Card className="p-4 sm:p-5">
+        <div className="flex items-center justify-between mb-3">
+          <button className="res-arrow" onClick={() => setCursor(new Date(year, month - 1, 1))} aria-label="Mes anterior">
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <h3 className="font-display text-base font-bold">
-            {MONTHS[month]} {year}
+          <h3 className="font-display text-lg font-semibold italic tracking-wide">
+            {MONTHS[month]} <span className="not-italic text-muted-foreground font-normal text-base">{year}</span>
           </h3>
-          <button className="btn-ghost !p-1.5" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
+          <button className="res-arrow" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-muted-foreground mb-1">
+        <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80 mb-1.5">
           {DOW.map((d, i) => (
             <div key={i}>{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-0.5">
+        <div className="grid grid-cols-7 gap-1">
           {cells.map((d, i) => {
             if (!d) return <div key={i} />;
             const list = dayInfo.get(d) ?? [];
@@ -172,21 +172,19 @@ function CalendarView({
               <button
                 key={i}
                 onClick={() => onSelect(d)}
-                className={`h-9 rounded-lg text-xs font-semibold grid place-items-center relative transition-colors ${
-                  isSel
-                    ? "bg-primary text-primary-foreground"
-                    : approved
-                      ? "bg-destructive/50 text-destructive-foreground"
-                      : pending
-                        ? "bg-info/40 text-foreground"
-                        : "bg-white/40 text-foreground hover:bg-white/60"
-                } ${isToday && !isSel ? "ring-2 ring-primary/60" : ""}`}
+                className={`res-day ${isSel ? "res-day-selected" : ""} ${isToday && !isSel ? "res-day-today" : ""} ${
+                  approved && !isSel ? "text-destructive font-semibold" : ""
+                }`}
               >
                 {Number(d.slice(-2))}
                 {(approved || pending) && (
                   <span
-                    className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
-                      approved ? "bg-destructive-foreground" : "bg-info-foreground"
+                    className={`absolute bottom-1 w-1 h-1 rounded-full ${
+                      isSel
+                        ? "bg-primary-foreground"
+                        : approved
+                          ? "bg-destructive"
+                          : "bg-info"
                     }`}
                   />
                 )}
@@ -195,30 +193,35 @@ function CalendarView({
           })}
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-2 text-[10px] text-muted-foreground">
-          <Legend className="bg-destructive/50" label="Reservado" />
-          <Legend className="bg-info/40" label="Pendiente" />
-          <Legend className="bg-white/40" label="Libre" />
+        <div className="flex flex-wrap gap-4 mt-3 pt-3 border-t border-border/60 text-[10px] uppercase tracking-wider text-muted-foreground">
+          <Legend className="bg-destructive" label="Reservado" />
+          <Legend className="bg-info" label="Pendiente" />
+          <Legend className="border border-input/70 bg-transparent" label="Libre" />
         </div>
       </Card>
 
-      <Card className="p-3">
-        <h3 className="font-semibold text-sm mb-1.5">{prettyDate(selected)}</h3>
+      <Card className="p-4 sm:p-5">
+        <h3 className="font-display text-base font-semibold italic mb-2.5">{prettyDate(selected)}</h3>
         {dayRes.length === 0 ? (
           <p className="text-sm text-muted-foreground">Día libre, sin reservas.</p>
         ) : (
-          <ul className="space-y-1.5">
+          <ul className="space-y-2">
             {dayRes.map((r) => (
-              <li key={r.id} className="flex items-start gap-2 text-sm">
+              <li
+                key={r.id}
+                className={`flex items-start gap-2.5 text-sm rounded-lg border-l-2 py-1.5 pl-3 pr-2 ${
+                  r.status === "aprobada" ? "border-destructive/70 bg-destructive/5" : "border-info/60 bg-info/5"
+                }`}
+              >
                 {r.status === "aprobada" ? (
-                  <CalendarCheck className="w-4 h-4 mt-0.5 text-destructive-foreground" />
+                  <CalendarCheck className="w-4 h-4 mt-0.5 text-destructive" />
                 ) : (
-                  <Clock className="w-4 h-4 mt-0.5 text-muted-foreground" />
+                  <Clock className="w-4 h-4 mt-0.5 text-info" />
                 )}
                 <div>
                   <p className="font-medium text-sm">
                     {SLOT_LABEL[r.slot]} ·{" "}
-                    <span className={r.status === "aprobada" ? "text-destructive-foreground" : "text-muted-foreground"}>
+                    <span className={r.status === "aprobada" ? "text-destructive" : "text-info"}>
                       {r.status === "aprobada" ? "Aprobada" : "Pendiente de aprobación"}
                     </span>
                   </p>
@@ -230,7 +233,7 @@ function CalendarView({
             ))}
           </ul>
         )}
-        <button className="btn-primary mt-3 w-full justify-center text-sm py-2" onClick={() => onRequest(selected)}>
+        <button className="btn-primary mt-4 w-full justify-center text-sm py-2" onClick={() => onRequest(selected)}>
           Solicitar este día
         </button>
       </Card>
@@ -241,7 +244,7 @@ function CalendarView({
 function Legend({ className, label }: { className: string; label: string }) {
   return (
     <span className="flex items-center gap-1.5">
-      <span className={`w-3 h-3 rounded ${className}`} /> {label}
+      <span className={`w-2 h-2 rounded-full ${className}`} /> {label}
     </span>
   );
 }
