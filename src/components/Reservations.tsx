@@ -148,12 +148,16 @@ function CalendarView({
             <ChevronLeft className="w-4 h-4" />
           </button>
           <h3 className="font-display text-lg font-semibold italic tracking-wide">
-            {MONTHS[month]} <span className="not-italic text-muted-foreground font-normal text-base">{year}</span>
+            <span className="bg-gradient-to-r from-primary via-terra-600 to-accent bg-clip-text text-transparent">
+              {MONTHS[month]}
+            </span>{" "}
+            <span className="not-italic text-muted-foreground font-normal text-base">{year}</span>
           </h3>
           <button className="res-arrow" onClick={() => setCursor(new Date(year, month + 1, 1))} aria-label="Mes siguiente">
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
+        <div className="mx-auto mb-3 h-px w-28 bg-gradient-to-r from-transparent via-primary/45 to-transparent" />
 
         <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/80 mb-1.5">
           {DOW.map((d, i) => (
