@@ -117,7 +117,6 @@ export interface StockMove {
 
 
 
-const ROW_ID = "main";
 const LOCAL_KEY = "barro-app-v1";
 
 const defaultState: State = { events: [], activeEventId: null };
