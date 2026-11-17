@@ -1,3 +1,5 @@
+import { getClubPin, startSync, PIN_KEY } from "@/lib/store";
+import { verifyClubPin } from "@/lib/shared-state.functions";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, setActiveEvent } from "@/lib/store";
@@ -115,6 +117,56 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[
 ];
 
 function Index() {
+  const [unlocked, setUnlocked] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (getClubPin()) {
+      startSync();
+      setUnlocked(true);
+    } else setUnlocked(false);
+  }, []);
+  if (unlocked === null) return null;
+  if (!unlocked) return <PinGate onOk={() => { startSync(); setUnlocked(true); }} />;
+  return <AppHome />;
+}
+
+function PinGate({ onOk }: { onOk: () => void }) {
+  const [pin, setPin] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
+    setBusy(true);
+    setErr("");
+    const r = await verifyClubPin({ data: { pin: pin.trim() } }).catch(() => ({ ok: false }));
+    setBusy(false);
+    if (r.ok) {
+      localStorage.setItem(PIN_KEY, pin.trim());
+      onOk();
+    } else setErr("PIN incorrecto");
+  };
+  return (
+    <div className="min-h-screen grid place-items-center px-4">
+      <div className="bg-card/90 backdrop-blur-md rounded-2xl border border-border p-6 w-full max-w-xs space-y-3 text-center">
+        <h1 className="text-2xl font-bold font-display">Barro CB</h1>
+        <p className="text-sm text-muted-foreground">Introduce el PIN del club</p>
+        <input
+          type="password"
+          inputMode="numeric"
+          className="input-base text-center"
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && submit()}
+          autoFocus
+        />
+        {err && <p className="text-sm text-destructive">{err}</p>}
+        <button className="btn-primary w-full justify-center" disabled={busy || !pin.trim()} onClick={submit}>
+          Entrar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function AppHome() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const event = useStore((s) =>
