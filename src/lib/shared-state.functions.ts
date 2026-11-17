@@ -15,7 +15,7 @@ export const verifyClubPin = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ pin: pinSchema.optional() }).parse(d))
   .handler(async ({ data }) => {
     try {
-      await checkPin(data.pin);
+      await checkPin(data.pin ?? "");
       return { ok: true };
     } catch {
       return { ok: false };
