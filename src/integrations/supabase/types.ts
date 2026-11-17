@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      club_settings: {
+        Row: {
+          id: string
+          pin: string
+        }
+        Insert: {
+          id: string
+          pin: string
+        }
+        Update: {
+          id?: string
+          pin?: string
+        }
+        Relationships: []
+      }
       shared_state: {
         Row: {
           id: string
