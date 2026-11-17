@@ -1,5 +1,8 @@
 import { useSyncExternalStore } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { getSharedState, saveSharedState } from "@/lib/shared-state.functions";
+
+export const PIN_KEY = "barro-club-pin";
+export const getClubPin = () => (typeof window === "undefined" ? null : localStorage.getItem(PIN_KEY));
 import { PRODUCTS, setActiveProducts, getProduct, price, type Category, type Product } from "@/lib/catalog";
 
 
@@ -114,7 +117,6 @@ export interface StockMove {
 
 
 
-const ROW_ID = "main";
 const LOCAL_KEY = "barro-app-v1";
 
 const defaultState: State = { events: [], activeEventId: null };
@@ -165,10 +167,9 @@ function schedulePush() {
     .then(async () => {
       // Only push the most recent snapshot; skip if a newer push has been queued
       if (startedAt !== lastPushedAt) return;
-      const { error } = await supabase
-        .from("shared_state")
-        .upsert({ id: ROW_ID, state: snapshot as any, updated_at: new Date().toISOString() });
-      if (error) console.error("[store] push error", error);
+      const pin = getClubPin();
+      if (!pin) return;
+      await saveSharedState({ data: { pin, state: snapshot as any } });
     })
     .catch((e) => console.error("[store] push chain error", e));
 }
@@ -190,45 +191,31 @@ export function useStore<T>(sel: (s: State) => T): T {
   );
 }
 
-// ---- Cloud sync bootstrap ----
-if (typeof window !== "undefined") {
-  // Initial fetch
-  void (async () => {
-    const { data, error } = await supabase
-      .from("shared_state")
-      .select("state")
-      .eq("id", ROW_ID)
-      .maybeSingle();
-    if (error) {
-      console.error("[store] initial fetch error", error);
-      return;
-    }
-    if (data?.state) {
-      state = data.state as unknown as State;
-      emit(false);
-    } else {
-      // Row doesn't exist yet: push current local state
-      schedulePush();
-    }
-  })();
-
-  // Realtime subscription
-  supabase
-    .channel("shared_state_changes")
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "shared_state", filter: `id=eq.${ROW_ID}` },
-      (payload) => {
-        const next = (payload.new as { state?: State } | null)?.state;
-        if (!next) return;
-        // Merge only if different from current state
-        const nextStr = JSON.stringify(next);
-        if (nextStr === JSON.stringify(state)) return;
-        state = next;
+// ---- Cloud sync bootstrap (PIN-protected, polled) ----
+let started = false;
+export function startSync() {
+  if (typeof window === "undefined" || started) return;
+  const pin = getClubPin();
+  if (!pin) return;
+  started = true;
+  const pull = async (first: boolean) => {
+    try {
+      const { json } = await getSharedState({ data: { pin } });
+      const remote = json ? JSON.parse(json) : null;
+      if (remote) {
+        if (Date.now() - lastPushedAt < 3000) return;
+        if (JSON.stringify(remote) === JSON.stringify(state)) return;
+        state = remote as unknown as State;
         emit(false);
-      },
-    )
-    .subscribe();
+      } else if (first) {
+        schedulePush();
+      }
+    } catch (e) {
+      console.error("[store] fetch error", e);
+    }
+  };
+  void pull(true);
+  setInterval(() => void pull(false), 4000);
 }
 
 const uid = () => Math.random().toString(36).slice(2, 10);
