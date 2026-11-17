@@ -1,7 +1,7 @@
 import { getClubPin, startSync, PIN_KEY } from "@/lib/store";
 import { verifyClubPin } from "@/lib/shared-state.functions";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore, setActiveEvent } from "@/lib/store";
 import { EventList } from "@/components/EventList";
 import { EventView } from "@/components/EventView";
