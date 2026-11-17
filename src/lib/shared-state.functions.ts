@@ -28,7 +28,7 @@ export const getSharedState = createServerFn({ method: "POST" })
     const admin = await checkPin(data.pin);
     const { data: row, error } = await admin.from("shared_state").select("state").eq("id", ROW_ID).maybeSingle();
     if (error) throw new Error("No se pudo cargar");
-    return { state: (row?.state ?? null) as unknown as Record<string, unknown> | null };
+    return { json: row?.state ? JSON.stringify(row.state) : null };
   });
 
 export const saveSharedState = createServerFn({ method: "POST" })

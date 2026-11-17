@@ -200,7 +200,8 @@ export function startSync() {
   started = true;
   const pull = async (first: boolean) => {
     try {
-      const { state: remote } = await getSharedState({ data: { pin } });
+      const { json } = await getSharedState({ data: { pin } });
+      const remote = json ? JSON.parse(json) : null;
       if (remote) {
         if (Date.now() - lastPushedAt < 3000) return;
         if (JSON.stringify(remote) === JSON.stringify(state)) return;
