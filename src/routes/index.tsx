@@ -1,4 +1,4 @@
-import { getClubPin, startSync, PIN_KEY } from "@/lib/store";
+import { startSync, PIN_KEY } from "@/lib/store";
 import { verifyClubPin } from "@/lib/shared-state.functions";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -119,10 +119,8 @@ const APPS: { id: Tab; label: string; icon: React.ReactNode; subtitle: string }[
 function Index() {
   const [unlocked, setUnlocked] = useState<boolean | null>(null);
   useEffect(() => {
-    if (getClubPin()) {
-      startSync();
-      setUnlocked(true);
-    } else setUnlocked(false);
+    startSync();
+    setUnlocked(true);
   }, []);
   if (unlocked === null) return null;
   if (!unlocked) return <PinGate onOk={() => { startSync(); setUnlocked(true); }} />;

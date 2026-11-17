@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 import { getSharedState, saveSharedState } from "@/lib/shared-state.functions";
 
 export const PIN_KEY = "barro-club-pin";
-export const getClubPin = () => (typeof window === "undefined" ? null : localStorage.getItem(PIN_KEY));
+export const getClubPin = () => "open";
 import { PRODUCTS, setActiveProducts, getProduct, price, type Category, type Product } from "@/lib/catalog";
 
 

@@ -12,7 +12,7 @@ async function checkPin(pin: string) {
 }
 
 export const verifyClubPin = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => z.object({ pin: pinSchema }).parse(d))
+  .inputValidator((d: unknown) => z.object({ pin: pinSchema.optional() }).parse(d))
   .handler(async ({ data }) => {
     try {
       await checkPin(data.pin);
@@ -23,9 +23,9 @@ export const verifyClubPin = createServerFn({ method: "POST" })
   });
 
 export const getSharedState = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) => z.object({ pin: pinSchema }).parse(d))
+  .inputValidator((d: unknown) => z.object({ pin: pinSchema.optional() }).parse(d))
   .handler(async ({ data }) => {
-    const admin = await checkPin(data.pin);
+    const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
     const { data: row, error } = await admin.from("shared_state").select("state").eq("id", ROW_ID).maybeSingle();
     if (error) throw new Error("No se pudo cargar");
     return { json: row?.state ? JSON.stringify(row.state) : null };
@@ -33,10 +33,10 @@ export const getSharedState = createServerFn({ method: "POST" })
 
 export const saveSharedState = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) =>
-    z.object({ pin: pinSchema, state: z.record(z.string(), z.any()) }).parse(d),
+    z.object({ pin: pinSchema.optional(), state: z.record(z.string(), z.any()) }).parse(d),
   )
   .handler(async ({ data }) => {
-    const admin = await checkPin(data.pin);
+    const { supabaseAdmin: admin } = await import("@/integrations/supabase/client.server");
     const { error } = await admin
       .from("shared_state")
       .upsert({ id: ROW_ID, state: data.state as any, updated_at: new Date().toISOString() });
